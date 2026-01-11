@@ -5,59 +5,41 @@ using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
-namespace MornNovel
+namespace MornLib
 {
-    public static class MornNovelUtil
+    internal static class MornNovelUtil
     {
-#if UNITY_EDITOR
-        private static bool? _showDescription;
-        public static bool ShowDescription
-        {
-            get => _showDescription ??= EditorPrefs.GetBool($"{nameof(MornNovel)}_{nameof(ShowDescription)}", true);
-            set
-            {
-                _showDescription = value;
-                EditorPrefs.SetBool($"{nameof(MornNovel)}_{nameof(ShowDescription)}", value);
-            }
-        }
-
-        [MenuItem("Tools/MornNovel/説明欄を表示")]
-        private static void SetShowDescription()
-        {
-            ShowDescription = true;
-        }
-
-        [MenuItem("Tools/MornNovel/説明欄を非表示")]
-        private static void SetHideDescription()
-        {
-            ShowDescription = false;
-        }
-#endif
-
         /// <summary>Addressableに登録されている全てのNovelアドレスを取得する（エディタ専用）</summary>
         public async static UniTask<List<string>> GetAllNovelAddressesAsync()
         {
             var label = MornNovelGlobal.I.AddressLabelTag;
             var locations = await Addressables.LoadResourceLocationsAsync(label, typeof(GameObject));
-            return locations.Select(location => location.PrimaryKey).OrderBy(address => address.Split('/').Length)
-                            .ThenBy(address => address).ToList();
+            return locations.Select(location => location.PrimaryKey).OrderBy(address => address.Split('/').Length).ThenBy(address => address).ToList();
         }
 
         public static bool IsUpperNovel => SceneManager.sceneCount > 1;
 
-        public async static UniTask DOTextAsync(string context, Action<string> setText,
-            Func<(AudioClip clip, float interval)> getMessageClip, Func<AudioClip> getSubmitClip,
-            Action<AudioClip> playSe, Action<bool> showWaitInputIcon, bool isWaitInput, Func<bool> submitFunc,
-            Func<bool> isAutoPlayFunc, Func<char, float> charInterval, float startOffset = 0.1f, float endOffset = 0.1f,
-            bool waitAtMark = true, TMP_Text autoSizeText = null, CancellationToken ct = default)
+        public async static UniTask DOTextAsync(string context,
+            Action<string> setText,
+            Func<(AudioClip clip, float interval)> getMessageClip,
+            Func<AudioClip> getSubmitClip,
+            Action<AudioClip> playSe,
+            Action<bool> showWaitInputIcon,
+            bool isWaitInput,
+            Func<bool> submitFunc,
+            Func<bool> isAutoPlayFunc,
+            Func<char, float> charInterval,
+            float startOffset = 0.1f,
+            float endOffset = 0.1f,
+            bool waitAtMark = true,
+            TMP_Text autoSizeText = null,
+            CancellationToken ct = default)
         {
             var prefix = "";
             if (autoSizeText != null)
@@ -150,8 +132,7 @@ namespace MornNovel
             }
         }
 
-        private async static UniTask<bool> WaitSecondsReturnSkipped(float seconds, Func<bool> submitFunc,
-            CancellationToken ct = default)
+        private async static UniTask<bool> WaitSecondsReturnSkipped(float seconds, Func<bool> submitFunc, CancellationToken ct = default)
         {
             var elapsedTime = 0f;
             while (elapsedTime < seconds)
@@ -170,23 +151,15 @@ namespace MornNovel
             return false;
         }
 
-        public async static UniTask DOLocalMove(this Transform target, Vector3 endValue, float duration,
-            CancellationToken ct = default)
+        public async static UniTask DOLocalMove(this Transform target, Vector3 endValue, float duration, CancellationToken ct = default)
         {
             if (target != null)
             {
-                await DOAsync(
-                    target.localPosition,
-                    endValue,
-                    duration,
-                    Vector3.Lerp,
-                    x => target.localPosition = x,
-                    ct);
+                await DOAsync(target.localPosition, endValue, duration, Vector3.Lerp, x => target.localPosition = x, ct);
             }
         }
 
-        public async static UniTask DOLocalMoveX(this Transform target, float endValue, float duration,
-            CancellationToken ct = default)
+        public async static UniTask DOLocalMoveX(this Transform target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target != null)
             {
@@ -194,8 +167,7 @@ namespace MornNovel
             }
         }
 
-        public async static UniTask DOLocalMoveY(this Transform target, float endValue, float duration,
-            CancellationToken ct = default)
+        public async static UniTask DOLocalMoveY(this Transform target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target != null)
             {
@@ -203,8 +175,7 @@ namespace MornNovel
             }
         }
 
-        public async static UniTask DOFade(this CanvasGroup target, float endValue, float duration,
-            CancellationToken ct = default)
+        public async static UniTask DOFade(this CanvasGroup target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target != null)
             {
@@ -212,8 +183,7 @@ namespace MornNovel
             }
         }
 
-        public async static UniTask DOFade(this Image target, float endValue, float duration,
-            CancellationToken ct = default)
+        public async static UniTask DOFade(this Image target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target)
             {
@@ -221,21 +191,12 @@ namespace MornNovel
             }
         }
 
-        public static async UniTask DoMaterialFloat(this Image target, string propertyName, float endValue,
-            float duration, CancellationToken ct = default)
+        public static async UniTask DoMaterialFloat(this Image target, string propertyName, float endValue, float duration, CancellationToken ct = default)
         {
-            if (target)
-                await DOAsync(
-                    target.material.GetFloat(propertyName),
-                    endValue,
-                    duration,
-                    Mathf.Lerp,
-                    x => target.material.SetFloat(propertyName, x),
-                    ct);
+            if (target) await DOAsync(target.material.GetFloat(propertyName), endValue, duration, Mathf.Lerp, x => target.material.SetFloat(propertyName, x), ct);
         }
 
-        public async static UniTask DOFade(this SpriteRenderer target, float endValue, float duration,
-            CancellationToken ct = default)
+        public async static UniTask DOFade(this SpriteRenderer target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target)
             {
@@ -243,8 +204,7 @@ namespace MornNovel
             }
         }
 
-        private async static UniTask DOAsync<T>(T startValue, T endValue, float duration, Func<T, T, float, T> rateFunc,
-            Action<T> onUpdateValue, CancellationToken ct = default)
+        private async static UniTask DOAsync<T>(T startValue, T endValue, float duration, Func<T, T, float, T> rateFunc, Action<T> onUpdateValue, CancellationToken ct = default)
         {
             // TODO Easingを設定できるように
             var elapsedTime = 0f;

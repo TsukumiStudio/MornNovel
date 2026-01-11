@@ -1,14 +1,13 @@
 ﻿using System.Threading;
 using Cysharp.Threading.Tasks;
-using MornLocalize;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
-    public sealed class MornNovelBubbleMono : MonoBehaviour
+    internal sealed class MornNovelBubbleMono : MonoBehaviour
     {
         private static readonly int _topColor = Shader.PropertyToID("_TopColor");
         private static readonly int _centerColor = Shader.PropertyToID("_CenterColor");

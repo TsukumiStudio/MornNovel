@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [CreateAssetMenu(fileName = nameof(MornNovelCameraShakeSettings), menuName = nameof(MornNovelCameraShakeSettings))]
-    public sealed class MornNovelCameraShakeSettings : ScriptableObject
+    internal sealed class MornNovelCameraShakeSettings : UnityEngine.ScriptableObject
     {
         public float ShakeStrength = 1f;
         public int ShakeCount = 5;

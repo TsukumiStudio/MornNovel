@@ -1,13 +1,12 @@
 ﻿using System.Reflection;
 using Arbor;
 using Cysharp.Threading.Tasks;
-using MornLocalize;
 using UnityEditor;
 using UnityEngine;
 
-namespace MornNovel.Editor
+namespace MornLib
 {
-    public sealed class MornLocalizeShortcutWindow : EditorWindow
+    internal sealed class MornLocalizeShortcutWindow : EditorWindow
     {
         private Vector2 _scrollPosition;
         private ArborFSM _arborFsm;

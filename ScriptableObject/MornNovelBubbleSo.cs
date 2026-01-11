@@ -1,10 +1,10 @@
 ﻿using MornEditor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [CreateAssetMenu(fileName = nameof(MornNovelBubbleSo), menuName = "Morn/" + nameof(MornNovelBubbleSo))]
-    public sealed class MornNovelBubbleSo : ScriptableObject
+    internal sealed class MornNovelBubbleSo : UnityEngine.ScriptableObject
     {
         public Vector2 NamePosition;
         public Vector2 BubblePosition;

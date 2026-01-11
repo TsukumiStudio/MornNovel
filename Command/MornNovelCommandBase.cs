@@ -2,9 +2,9 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
-    public abstract class MornNovelCommandBase : StateBehaviour
+    internal abstract class MornNovelCommandBase : StateBehaviour
     {
         public virtual Color? CommandColor => null;
         public virtual string Tips { get; }
@@ -16,12 +16,6 @@ namespace MornNovel
     {
         public override void OnInspectorGUI()
         {
-            if (!MornNovelUtil.ShowDescription)
-            {
-                base.OnInspectorGUI();
-                return;
-            }
-            
             var commandBase = (MornNovelCommandBase)target;
             EditorGUILayout.HelpBox(commandBase.Tips, MessageType.Info);
             var topColor = commandBase.CommandColor;

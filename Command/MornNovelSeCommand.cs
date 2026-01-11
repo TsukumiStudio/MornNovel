@@ -2,10 +2,10 @@
 using UnityEngine;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
     [Serializable]
-    public class MornNovelSeCommand : MornNovelCommandBase
+    internal class MornNovelSeCommand : MornNovelCommandBase
     {
         public override string Tips => "SEを再生する";
         [Inject] private MornNovelControllerMono _novelController;

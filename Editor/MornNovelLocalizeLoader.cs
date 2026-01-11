@@ -1,12 +1,11 @@
 ﻿using Arbor;
 using Cysharp.Threading.Tasks;
-using MornLocalize;
 using UnityEditor;
 using UnityEngine;
 
-namespace MornNovel.Editor
+namespace MornLib
 {
-    public sealed class MornNovelLocalizeBuilder
+    internal sealed class MornNovelLocalizeBuilder
     {
         private readonly string _uploadUrl;
         private readonly ArborFSM _arborFsm;
@@ -61,7 +60,7 @@ namespace MornNovel.Editor
             }
         }
 
-        private State BuildAndGetNextState(State state, bool convertToFromKey)
+        private Arbor.State BuildAndGetNextState(Arbor.State state, bool convertToFromKey)
         {
             var behaviourCount = state.behaviourCount;
             for (int i = 0; i < behaviourCount; i++)
@@ -102,7 +101,7 @@ namespace MornNovel.Editor
             return null;
         }
 
-        private State ConvertAndGetNextState(State state)
+        private Arbor.State ConvertAndGetNextState(Arbor.State state)
         {
             var behaviourCount = state.behaviourCount;
             for (int i = 0; i < behaviourCount; i++)

@@ -1,11 +1,8 @@
 using System.Runtime.CompilerServices;
-using MornGlobal;
-using MornScene;
-using MornTransition;
 using UnityEngine;
 
 [assembly: InternalsVisibleTo("MornNovel.Editor")]
-namespace MornNovel
+namespace MornLib
 {
     [CreateAssetMenu(fileName = nameof(MornNovelGlobal), menuName = "Morn/" + nameof(MornNovelGlobal))]
     public sealed class MornNovelGlobal : MornGlobalBase<MornNovelGlobal>
@@ -20,7 +17,7 @@ namespace MornNovel
         public float CharInterval = 0.05f;
         public float CharReturnInterval = 0.1f;
         public MornTransitionType DebugTransition;
-        protected override string ModuleName => nameof(MornNovel);
+        public override string ModuleName => "MornNovel";
         public string AddressGroupName => _addressGroupName;
         public string AddressLabelTag => _addressLabelTag;
         public string IgnoreAddressPrefix => _ignoreAddressPrefix;

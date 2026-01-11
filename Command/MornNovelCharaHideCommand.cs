@@ -3,10 +3,10 @@ using Arbor;
 using MornEditor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [Serializable]
-    public class MornNovelCharaHideCommand : MornNovelCommandBase
+    internal class MornNovelCharaHideCommand : MornNovelCommandBase
     {
         public override string Tips => "キャラクターを退場させる";
         [SerializeField] [ViewableSearch] private MornNovelTalkerSo _talker;

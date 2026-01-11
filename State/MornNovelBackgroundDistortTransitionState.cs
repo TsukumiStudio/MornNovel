@@ -2,9 +2,9 @@ using Arbor;
 using MornEditor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
-    public class MornNovelBackgroundDistortTransitionState : StateBehaviour
+    internal class MornNovelBackgroundDistortTransitionState : StateBehaviour
     {
         [SerializeField] [SpritePreview] private Sprite _prevSprite;
         [SerializeField] [SpritePreview] private Sprite _nextSprite;

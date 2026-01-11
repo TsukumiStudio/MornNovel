@@ -1,12 +1,11 @@
 ﻿using MornColor;
 using MornEditor;
-using MornLocalize;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [CreateAssetMenu(fileName = nameof(MornNovelTalkerSo), menuName = "Morn/" + nameof(MornNovelTalkerSo))]
-    public sealed class MornNovelTalkerSo : ScriptableObject
+    internal sealed class MornNovelTalkerSo : ScriptableObject
     {
         [SerializeField] [Label("日本語")] private MornLocalizeString _localize;
         [SerializeField] [Label("複数人")] private bool _isMulti;

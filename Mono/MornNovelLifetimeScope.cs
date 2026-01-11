@@ -2,9 +2,9 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace MornNovel
+namespace MornLib
 {
-    public sealed class MornNovelLifetimeScope : LifetimeScope
+    internal sealed class MornNovelLifetimeScope : LifetimeScope
     {
         [SerializeField] private MornNovelControllerMono _novelController;
         [SerializeField] private MornNovelSettings _novelSettings;

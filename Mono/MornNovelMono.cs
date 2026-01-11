@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
     public sealed class MornNovelMono : MonoBehaviour
     {

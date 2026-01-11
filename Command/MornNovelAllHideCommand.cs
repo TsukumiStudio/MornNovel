@@ -3,10 +3,10 @@ using Arbor;
 using UnityEngine;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
     [Serializable]
-    public class MornNovelAllHideCommand : MornNovelCommandBase
+    internal class MornNovelAllHideCommand : MornNovelCommandBase
     {
         [SerializeField] private StateLink _nextState;
         [Inject] private MornNovelControllerMono _controller;

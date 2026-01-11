@@ -3,10 +3,10 @@ using UnityEditor;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 
-namespace MornNovel.Editor
+namespace MornLib
 {
     [InitializeOnLoad]
-    public static class MornNovelModificationAddressAssigner
+    internal static class MornNovelModificationAddressAssigner
     {
         static MornNovelModificationAddressAssigner()
         {

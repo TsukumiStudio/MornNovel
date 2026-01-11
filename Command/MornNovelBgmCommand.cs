@@ -1,13 +1,12 @@
 ﻿using System;
 using Arbor;
-using MornBeat;
 using UnityEngine;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
     [Serializable]
-    public class MornNovelBgmCommand : MornNovelCommandBase
+    internal class MornNovelBgmCommand : MornNovelCommandBase
     {
         public override string Tips => "BGMを再生する(nullで停止)";
         [SerializeField] private MornBeatMemoSo _beatMemo;

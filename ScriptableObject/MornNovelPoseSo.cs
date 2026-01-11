@@ -2,10 +2,10 @@
 using MornEditor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [CreateAssetMenu(fileName = nameof(MornNovelPoseSo), menuName = "Morn/" + nameof(MornNovelPoseSo))]
-    public sealed class MornNovelPoseSo : ScriptableObject
+    internal sealed class MornNovelPoseSo : ScriptableObject
     {
         public MornNovelTalkerSo Talker;
         [SpritePreview(100f)] public Sprite DefaultSprite;

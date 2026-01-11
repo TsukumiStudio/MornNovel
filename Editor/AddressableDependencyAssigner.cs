@@ -4,7 +4,7 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 
-namespace MornNovel._Morn.MornNovel.Editor
+namespace MornLib
 {
     public static class AddressableDependencyAssigner
     {

@@ -2,9 +2,8 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 
-namespace MornNovel
+namespace MornLib
 {
     [CustomPropertyDrawer(typeof(MornNovelAddress))]
     internal sealed class MornNovelAddressDrawer : PropertyDrawer

@@ -4,7 +4,7 @@ using MornEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace MornNovel
+namespace MornLib
 {
     [Serializable]
     public class MornNovelPoseAnimation

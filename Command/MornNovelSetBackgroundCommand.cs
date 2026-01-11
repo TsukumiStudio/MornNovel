@@ -3,10 +3,10 @@ using Arbor;
 using MornEditor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [Serializable]
-    public class MornNovelSetBackgroundCommand : MornNovelCommandBase
+    internal class MornNovelSetBackgroundCommand : MornNovelCommandBase
     {
         public override string Tips => "背景を設定する";
         [SerializeField] [SpritePreview] [Label("背景")] private Sprite _background;

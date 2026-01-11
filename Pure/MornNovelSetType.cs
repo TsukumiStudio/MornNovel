@@ -1,4 +1,4 @@
-namespace MornNovel
+namespace MornLib
 {
     public enum MornNovelSetType
     {

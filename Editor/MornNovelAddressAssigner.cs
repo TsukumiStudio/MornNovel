@@ -6,9 +6,9 @@ using UnityEditor.AddressableAssets;
 using UnityEditor.AddressableAssets.Settings;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
-    public static class MornNovelAddressAssigner
+    internal static class MornNovelAddressAssigner
     {
         private static bool TryLoadPrefabWithMornNovelMono(string assetPath, out GameObject prefab)
         {

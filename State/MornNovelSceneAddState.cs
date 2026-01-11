@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
-    public class MornNovelSceneAddState : StateBehaviour
+    internal class MornNovelSceneAddState : StateBehaviour
     {
         [SerializeField] private MornNovelAddress _novelAddress;
         [SerializeField] private StateLink _onNovelEnd;

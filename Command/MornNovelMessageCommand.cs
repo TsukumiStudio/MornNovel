@@ -3,14 +3,13 @@ using System.Threading;
 using Arbor;
 using Cysharp.Threading.Tasks;
 using MornEditor;
-using MornLocalize;
 using UnityEngine;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
     [Serializable]
-    public class MornNovelMessageCommand : MornNovelCommandBase
+    internal class MornNovelMessageCommand : MornNovelCommandBase
     {
         public override string Tips => "メッセージを表示する";
         [SerializeField] [ViewableSearch] private MornNovelTalkerSo _talker;

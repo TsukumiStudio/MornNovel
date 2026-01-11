@@ -1,12 +1,11 @@
 ﻿using System.Text;
 using Cysharp.Threading.Tasks;
-using MornLocalize;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace MornNovel
+namespace MornLib
 {
-    public static class MornSpreadSheetUploader
+    internal static class MornSpreadSheetUploader
     {
         public async static UniTask UploadJson(string uploadUrl, string json)
         {

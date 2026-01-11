@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [CustomPropertyDrawer(typeof(MornNovelPoseAnimation))]
-    public class MornNovelPoseAnimationDrawer : PropertyDrawer
+    internal class MornNovelPoseAnimationDrawer : PropertyDrawer
     {
         private MornNovelSettings _settings;
 

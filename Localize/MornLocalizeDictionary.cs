@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace MornNovel
+namespace MornLib
 {
-    public sealed class MornLocalizeDictionary
+    internal sealed class MornLocalizeDictionary
     {
         private readonly string _sheetName;
         private readonly List<Dictionary<string, string>> _strings = new List<Dictionary<string, string>>();

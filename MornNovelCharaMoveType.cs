@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     public enum MornNovelCharaMoveType
     {

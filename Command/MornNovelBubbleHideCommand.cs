@@ -2,10 +2,10 @@
 using Arbor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [Serializable]
-    public class MornNovelBubbleHideCommand : MornNovelCommandBase
+    internal class MornNovelBubbleHideCommand : MornNovelCommandBase
     {
         public override string Tips => "フキダシを消す";
         [SerializeField] private StateLink _nextState;

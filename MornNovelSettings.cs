@@ -1,9 +1,8 @@
 ﻿using MornEditor;
-using MornSound;
 using Unity.Cinemachine;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [CreateAssetMenu(fileName = nameof(MornNovelSettings), menuName = "Morn/" + nameof(MornNovelSettings))]
     public sealed class MornNovelSettings : ScriptableObject

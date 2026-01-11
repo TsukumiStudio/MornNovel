@@ -4,7 +4,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 using VContainer;
 using VContainer.Unity;
 
-namespace MornNovel
+namespace MornLib
 {
     internal sealed class MornNovelAutoLoaderMono : MonoBehaviour
     {

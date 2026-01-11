@@ -8,9 +8,9 @@ using UnityEngine.UI;
 using VContainer;
 using VContainer.Unity;
 
-namespace MornNovel
+namespace MornLib
 {
-    public sealed class MornNovelControllerMono : MonoBehaviour
+    internal sealed class MornNovelControllerMono : MonoBehaviour
     {
         private static readonly int _prevTex = Shader.PropertyToID("_PrevTex");
         private static readonly int _nextTex = Shader.PropertyToID("_NextTex");
@@ -63,7 +63,7 @@ namespace MornNovel
             if (isImmediate)
             {
                 _backgroundCts = null;
-                Next.SetAlpha(1);
+                MornNovelUtil.SetAlpha(Next, 1);
             }
             else
             {
@@ -82,7 +82,7 @@ namespace MornNovel
             Next.color = new Color(1, 1, 1, 0);
             Next.sprite = nextSprite;
             _novelService.OnShowBackground(nextSprite);
-            Next.SetAlpha(1);
+            MornNovelUtil.SetAlpha(Next, 1);
             Next.transform.SetAsLastSibling();
             Next.material = _novelSettings.DistortTransitionMaterial;
             Next.material.SetTexture(_prevTex, prevSprite.texture);

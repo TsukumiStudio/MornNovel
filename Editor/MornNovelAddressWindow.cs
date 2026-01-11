@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEditor.AddressableAssets;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     internal sealed class MornNovelAddressWindow : EditorWindow
     {

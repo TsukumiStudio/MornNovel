@@ -1,24 +1,19 @@
 ﻿using System.Collections.Generic;
 using Arbor;
 using Cysharp.Threading.Tasks;
-using MornBeat;
 using MornEditor;
-using MornSound;
-using MornTransition;
-using MornUtil;
 using UnityEngine;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
-    public class MornNovelStartCommand : MornNovelCommandBase
+    internal class MornNovelStartCommand : MornNovelCommandBase
     {
         public override string Tips => "ノベルを開始する";
         [SerializeField]
         [Label("BGM")] private MornBeatMemoSo _beatMemo;
         [SerializeField] private StateLink _nextState;
         [Inject] private MornNovelSettings _settings;
-        [Inject] private MornTransitionCtrl _transitionCtrl;
         [Inject] private MornSoundVolumeCore _volumeCore;
         [Inject] private MornBeatControllerMono _beatController;
         [Inject] private MornNovelService _novelService;
@@ -41,14 +36,7 @@ namespace MornNovel
             var ct = MornApp.QuitToken;
             if (_beatMemo != null)
             {
-                list.Add(
-                    _beatController.StartAsync(
-                        new MornBeatStartInfo()
-                        {
-                            BeatMemo = _beatMemo,
-                            FadeDuration = _settings.BgmChangeSec,
-                            Ct = ct,
-                        }));
+                list.Add(_beatController.StartAsync(new MornBeatStartInfo() { BeatMemo = _beatMemo, FadeDuration = _settings.BgmChangeSec, Ct = ct, }));
             }
             else
             {
@@ -59,12 +47,9 @@ namespace MornNovel
                 _volumeCore.FadeAsync(
                     new MornSoundVolumeFadeInfo
                     {
-                        SoundVolumeType = _settings.FadeVolumeType,
-                        Duration = _settings.BgmChangeSec,
-                        IsFadeIn = true,
-                        CancellationToken = ct,
+                        SoundVolumeType = _settings.FadeVolumeType, Duration = _settings.BgmChangeSec, IsFadeIn = true, CancellationToken = ct,
                     }));
-            list.Add(_transitionCtrl.ClearAsync(ct: ct));
+            list.Add(MornTransitionCore.ClearAsync(ct: ct));
             await UniTask.WhenAll(list);
             Transition(_nextState);
         }

@@ -5,9 +5,9 @@ using MornEditor;
 using UnityEngine;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
-    public sealed class MornNovelCharaMono : MonoBehaviour
+    internal sealed class MornNovelCharaMono : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private Transform _parentX;

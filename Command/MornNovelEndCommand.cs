@@ -1,17 +1,13 @@
 ﻿using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using MornBeat;
 using MornEditor;
-using MornScene;
-using MornSound;
-using MornTransition;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
-    public class MornNovelEndCommand : MornNovelCommandBase
+    internal class MornNovelEndCommand : MornNovelCommandBase
     {
         private enum NovelEndTransitionType
         {
@@ -35,7 +31,6 @@ namespace MornNovel
         private MornNovelAddress _address;
         [SerializeField, ShowIf(nameof(IsChangeNovel)), Label("読みかけ登録設定")] 
         private MornNovelSetType _setType;
-        [Inject] private MornTransitionCtrl _transitionCtrl;
         [Inject] private MornBeatControllerMono _beatController;
         [Inject] private MornNovelSettings _settings;
         [Inject] private MornNovelService _novelManager;
@@ -71,7 +66,7 @@ namespace MornNovel
             if (IsNeedTransition || _novelManager.IsDebug)
             {
                 var transition = _novelManager.IsDebug ? MornNovelGlobal.I.DebugTransition : _transitionType;
-                taskList.Add(_transitionCtrl.FillAsync(transition, ct));
+                taskList.Add(MornTransitionCore.FillAsync(transition, ct));
                 taskList.Add(_volume.FadeAsync(new MornSoundVolumeFadeInfo
                 {
                     SoundVolumeType = _settings.FadeVolumeType,

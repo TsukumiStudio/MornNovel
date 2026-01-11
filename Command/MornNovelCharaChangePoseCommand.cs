@@ -2,9 +2,9 @@
 using MornEditor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
-    public class MornNovelCharaChangePoseCommand : MornNovelCommandBase
+    internal class MornNovelCharaChangePoseCommand : MornNovelCommandBase
     {
         public override string Tips => "キャラクターの表情を変更する";
         [SerializeField] [ViewableSearch] private MornNovelPoseSo _pose;

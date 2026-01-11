@@ -7,9 +7,9 @@ using UnityEngine;
 using VContainer;
 using Random = UnityEngine.Random;
 
-namespace MornNovel
+namespace MornLib
 {
-    public class MornNovelCameraShakeCommand : MornNovelCommandBase
+    internal class MornNovelCameraShakeCommand : MornNovelCommandBase
     {
         public override string Tips => "カメラを揺らす";
         [SerializeField, Label("揺らし続ける")] private bool _isLoop;

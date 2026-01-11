@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     [Serializable]
     public struct MornNovelAddress

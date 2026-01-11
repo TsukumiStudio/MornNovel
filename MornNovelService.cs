@@ -1,10 +1,8 @@
 ﻿using System;
-using MornDebug;
-using MornUtil;
 using UniRx;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
     public sealed class MornNovelService
     {

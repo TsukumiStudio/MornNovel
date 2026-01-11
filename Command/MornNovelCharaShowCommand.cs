@@ -3,9 +3,9 @@ using Arbor;
 using MornEditor;
 using UnityEngine;
 
-namespace MornNovel
+namespace MornLib
 {
-    public class MornNovelCharaShowCommand : MornNovelCommandBase
+    internal class MornNovelCharaShowCommand : MornNovelCommandBase
     {
         public override string Tips => "キャラクターを表示する";
         [SerializeField] [ViewableSearch] private MornNovelPoseSo _pose;

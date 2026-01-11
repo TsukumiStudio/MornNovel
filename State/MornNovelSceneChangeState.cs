@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
-namespace MornNovel
+namespace MornLib
 {
-    public class MornNovelSceneChangeState : StateBehaviour
+    internal class MornNovelSceneChangeState : StateBehaviour
     {
         [SerializeField, Label("null可")] private MornNovelAddress _novelAddress;
         [Inject] private MornNovelService _novelManager;
