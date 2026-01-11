@@ -17,7 +17,7 @@ namespace MornLib
         public float CharInterval = 0.05f;
         public float CharReturnInterval = 0.1f;
         public MornTransitionType DebugTransition;
-        public override string ModuleName => "MornNovel";
+        protected override string ModuleName => "MornNovel";
         public string AddressGroupName => _addressGroupName;
         public string AddressLabelTag => _addressLabelTag;
         public string IgnoreAddressPrefix => _ignoreAddressPrefix;
