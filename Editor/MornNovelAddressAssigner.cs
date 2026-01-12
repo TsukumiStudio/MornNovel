@@ -13,44 +13,44 @@ namespace MornLib
         private static bool TryLoadPrefabWithMornNovelMono(string assetPath, out GameObject prefab)
         {
             prefab = null;
-            
             try
             {
                 // GameObjectとして読み込めるかチェック
                 var assetType = AssetDatabase.GetMainAssetTypeAtPath(assetPath);
                 if (assetType != typeof(GameObject))
                 {
-                    MornNovelGlobal.Log($"スキップ (GameObjectではない): {assetPath} (Type: {assetType})");
+                    MornNovelGlobal.Logger.Log($"スキップ (GameObjectではない): {assetPath} (Type: {assetType})");
                     return false;
                 }
-                
+
                 prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
                 if (prefab == null || prefab.GetComponent<MornNovelMono>() == null)
                 {
                     return false;
                 }
-                
+
                 return true;
             }
             catch (Exception e)
             {
-                MornNovelGlobal.LogError($"エラー発生: {assetPath} - {e.Message}");
+                MornNovelGlobal.Logger.LogError($"エラー発生: {assetPath} - {e.Message}");
                 return false;
             }
         }
+
         private static void CleanUpAddressables()
         {
             var global = MornNovelGlobal.I;
             if (global == null)
             {
-                MornNovelGlobal.LogError($"{nameof(MornNovelGlobal)} が見つかりません。");
+                MornNovelGlobal.Logger.LogError($"{nameof(MornNovelGlobal)} が見つかりません。");
                 return;
             }
 
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             if (settings == null)
             {
-                MornNovelGlobal.LogError("Addressable Asset Settings が見つかりません。");
+                MornNovelGlobal.Logger.LogError("Addressable Asset Settings が見つかりません。");
                 return;
             }
 
@@ -59,7 +59,7 @@ namespace MornLib
             var group = settings.FindGroup(groupName);
             if (group == null)
             {
-                MornNovelGlobal.LogError($"グループ {groupName} が見つかりません。");
+                MornNovelGlobal.Logger.LogError($"グループ {groupName} が見つかりません。");
                 return;
             }
 
@@ -73,7 +73,7 @@ namespace MornLib
                 if (!entry.labels.Contains(labelTag))
                 {
                     entriesToRemove.Add(entry);
-                    MornNovelGlobal.Log($"削除対象: {entry.address} ({assetPath})");
+                    MornNovelGlobal.Logger.Log($"削除対象: {entry.address} ({assetPath})");
                 }
                 // Novelラベルが付いていても、MornNovelMonoを持たないプレハブは削除対象
                 else if (assetPath.EndsWith(".prefab"))
@@ -81,7 +81,7 @@ namespace MornLib
                     if (!TryLoadPrefabWithMornNovelMono(assetPath, out _))
                     {
                         entriesToRemove.Add(entry);
-                        MornNovelGlobal.Log($"削除対象 (MornNovelMonoなし): {entry.address} ({assetPath})");
+                        MornNovelGlobal.Logger.Log($"削除対象 (MornNovelMonoなし): {entry.address} ({assetPath})");
                     }
                 }
             }
@@ -94,7 +94,7 @@ namespace MornLib
 
             settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryRemoved, null, true);
             AssetDatabase.SaveAssets();
-            MornNovelGlobal.Log($"クリーンアップ完了: {entriesToRemove.Count} 個のエントリを削除しました。");
+            MornNovelGlobal.Logger.Log($"クリーンアップ完了: {entriesToRemove.Count} 個のエントリを削除しました。");
         }
 
         [MenuItem("Tools/MornNovelアドレス設定")]
@@ -103,14 +103,14 @@ namespace MornLib
             var global = MornNovelGlobal.I;
             if (global == null)
             {
-                MornNovelGlobal.LogError($"{nameof(MornNovelGlobal)} が見つかりません。");
+                MornNovelGlobal.Logger.LogError($"{nameof(MornNovelGlobal)} が見つかりません。");
                 return;
             }
 
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             if (settings == null)
             {
-                MornNovelGlobal.LogError("Addressable Asset Settings が見つかりません。");
+                MornNovelGlobal.Logger.LogError("Addressable Asset Settings が見つかりません。");
                 return;
             }
 
@@ -122,7 +122,7 @@ namespace MornLib
             if (group == null)
             {
                 group = settings.CreateGroup(groupName, false, false, false, null);
-                MornNovelGlobal.Log($"グループ {groupName} を作成しました。");
+                MornNovelGlobal.Logger.Log($"グループ {groupName} を作成しました。");
             }
 
             // プレハブを検索
@@ -130,7 +130,6 @@ namespace MornLib
             foreach (var guid in guids)
             {
                 var assetPath = AssetDatabase.GUIDToAssetPath(guid);
-                
                 if (!TryLoadPrefabWithMornNovelMono(assetPath, out _))
                 {
                     continue;
@@ -158,7 +157,7 @@ namespace MornLib
                     entry = settings.CreateOrMoveEntry(guid, group);
                     entry.address = address;
                     entry.SetLabel(labelTag, true, true);
-                    MornNovelGlobal.Log($"アドレス {address} を設定しました。");
+                    MornNovelGlobal.Logger.Log($"アドレス {address} を設定しました。");
 
                     // 一旦無視
                     //　依存しているアセットのアドレスを設定
@@ -185,7 +184,7 @@ namespace MornLib
 
             settings.SetDirty(AddressableAssetSettings.ModificationEvent.EntryMoved, null, true);
             AssetDatabase.SaveAssets();
-            MornNovelGlobal.Log("MornNovelMono の Addressable 設定が完了しました。");
+            MornNovelGlobal.Logger.Log("MornNovelMono の Addressable 設定が完了しました。");
         }
 
         [MenuItem("Tools/MornNovelアドレス再設定 (クリーンアップも実行)")]

@@ -13,11 +13,13 @@ namespace MornLib
             // Addressableエントリが変更されたときにイベントをフック
             AddressableAssetSettings.OnModificationGlobal += OnAddressablesModified;
         }
-        
-        private static void OnAddressablesModified(AddressableAssetSettings settings, AddressableAssetSettings.ModificationEvent evt, object obj)
+
+        private static void OnAddressablesModified(AddressableAssetSettings settings,
+            AddressableAssetSettings.ModificationEvent evt,
+            object obj)
         {
-            if (evt != AddressableAssetSettings.ModificationEvent.EntryCreated &&
-                evt != AddressableAssetSettings.ModificationEvent.EntryMoved)
+            if (evt != AddressableAssetSettings.ModificationEvent.EntryCreated
+                && evt != AddressableAssetSettings.ModificationEvent.EntryMoved)
             {
                 return;
             }
@@ -30,9 +32,9 @@ namespace MornLib
                 if (group == null)
                 {
                     group = settings.CreateGroup(groupName, false, false, false, null);
-                    MornNovelGlobal.Log($"グループ {groupName} を作成しました。");
+                    MornNovelGlobal.Logger.Log($"グループ {groupName} を作成しました。");
                 }
-                
+
                 var addressableAssets = new HashSet<string> { entry.AssetPath };
                 List<string> assetsToAdd = new List<string>();
 
@@ -50,7 +52,7 @@ namespace MornLib
                 foreach (string asset in assetsToAdd)
                 {
                     var guid = AssetDatabase.AssetPathToGUID(asset);
-                    var newEntry = settings.CreateOrMoveEntry(guid,group);
+                    var newEntry = settings.CreateOrMoveEntry(guid, group);
                     Debug.Log($"Added to Addressables: {asset}");
                 }
 

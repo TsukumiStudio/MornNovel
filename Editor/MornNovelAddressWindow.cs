@@ -66,7 +66,7 @@ namespace MornLib
             var settings = AddressableAssetSettingsDefaultObject.Settings;
             if (settings == null)
             {
-                MornNovelGlobal.LogError("Addressable Asset Settings が見つかりません。");
+                MornNovelGlobal.Logger.LogError("Addressable Asset Settings が見つかりません。");
                 return;
             }
 
@@ -78,7 +78,7 @@ namespace MornLib
                 {
                     continue;
                 }
-                
+
                 var assetPath = AssetDatabase.GUIDToAssetPath(guid);
                 var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
                 if (prefab == null || prefab.GetComponent<MornNovelMono>() == null)
@@ -119,7 +119,7 @@ namespace MornLib
                 _addressProperty.serializedObject.ApplyModifiedProperties();
                 Close();
             }
-            
+
             _sceneAssetTree.OnGUI();
             /*
             _headerHashSet.Clear();
@@ -165,7 +165,6 @@ namespace MornLib
                 }
             }
             */
-
             _scrollPos = scroll.scrollPosition;
             if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.Escape)
             {

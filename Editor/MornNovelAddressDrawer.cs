@@ -45,7 +45,7 @@ namespace MornLib
                     var settings = AddressableAssetSettingsDefaultObject.Settings;
                     if (settings == null)
                     {
-                        MornNovelGlobal.LogError("Addressable Asset Settings が見つかりません。");
+                        MornNovelGlobal.Logger.LogError("Addressable Asset Settings が見つかりません。");
                     }
                     else
                     {
@@ -53,7 +53,7 @@ namespace MornLib
                                             .FirstOrDefault(e => e.address == address);
                         if (entry == null)
                         {
-                            MornNovelGlobal.LogError($"Addressable Asset {address} が見つかりません。");
+                            MornNovelGlobal.Logger.LogError($"Addressable Asset {address} が見つかりません。");
                         }
                         else
                         {

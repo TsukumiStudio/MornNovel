@@ -23,20 +23,5 @@ namespace MornLib
         public string IgnoreAddressPrefix => _ignoreAddressPrefix;
         public MornSceneObject NovelScene => _novelScene;
         public string UploadUrl => _uploadUrl;
-
-        public static void Log(string message)
-        {
-            I.LogInternal(message);
-        }
-
-        public static void LogWarning(string message)
-        {
-            I.LogWarningInternal(message);
-        }
-
-        public static void LogError(string message)
-        {
-            I.LogErrorInternal(message);
-        }
     }
 }
