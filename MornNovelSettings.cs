@@ -1,5 +1,4 @@
-﻿using MornEditor;
-using Unity.Cinemachine;
+﻿using Unity.Cinemachine;
 using UnityEngine;
 
 namespace MornLib

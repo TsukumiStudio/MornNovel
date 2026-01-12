@@ -2,7 +2,6 @@
 using System.Threading;
 using Arbor;
 using Cysharp.Threading.Tasks;
-using MornEditor;
 using UnityEngine;
 using VContainer;
 
@@ -16,7 +15,6 @@ namespace MornLib
         [SerializeField] [ViewableSearch] private MornNovelBubbleSo _overrideBubble;
         [SerializeField] [Label("セリフ")] private MornLocalizeString _localizeString;
         [SerializeField] private StateLink _stateLink;
-        [Inject] private MornLocalizeCore _localizeCore;
         [Inject] private MornNovelControllerMono _novelController;
         [Inject] private MornNovelSettings _novelSettings;
         [Inject] private MornNovelService _novelService;
@@ -25,7 +23,7 @@ namespace MornLib
         public string GetText()
         {
             // TODO: ローカライズ
-            return _localizeString.Get(_localizeCore?.CurrentLanguage ?? "jp");
+            return _localizeString.Get(MornLocalizeCore.CurrentLanguage ?? "jp");
         }
 
         public MornLocalizeString GetLocalizeString()
@@ -35,7 +33,7 @@ namespace MornLib
 
         public string GetTalkerName()
         {
-            return _talker.GetText(_localizeCore?.CurrentLanguage ?? "jp");
+            return _talker.GetText(MornLocalizeCore.CurrentLanguage ?? "jp");
         }
 
         public override async void OnStateBegin()

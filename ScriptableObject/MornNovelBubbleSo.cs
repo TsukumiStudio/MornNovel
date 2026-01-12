@@ -1,5 +1,4 @@
-﻿using MornEditor;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MornLib
 {

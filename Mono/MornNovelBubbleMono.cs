@@ -23,7 +23,6 @@ namespace MornLib
         [SerializeField] private Image _nameImage;
         [SerializeField] private Image _waitInputIcon;
         [Inject] private MornNovelSettings _novelSettings;
-        [Inject] private MornLocalizeCore _localizeCore;
         public TMP_Text MessageText => _messageText;
         private Material _nameBackMaterial;
         private Material _nameMaterial;
@@ -55,7 +54,7 @@ namespace MornLib
             _bubbleEdgeImage.transform.localScale = scale;
 
             // Talker
-            _nameText.text = talker.GetText(_localizeCore.CurrentLanguage);
+            _nameText.text = talker.GetText(MornLocalizeCore.CurrentLanguage);
             _nameMaterial.SetColor(_outlineColor, talker.TextColor);
             _messageText.color = talker.TextColor;
             _nameBackMaterial.SetColor(_topColor, talker.NameBackTopGradientColor);
