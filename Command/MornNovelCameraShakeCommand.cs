@@ -1,3 +1,4 @@
+#if USE_CINEMACHINE
 using System;
 using Arbor;
 using Cysharp.Threading.Tasks;
@@ -52,3 +53,4 @@ namespace MornLib
         }
     }
 }
+#endif

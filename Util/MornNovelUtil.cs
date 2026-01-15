@@ -5,11 +5,12 @@ using System.Text;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+#if USE_ADDRESSABLE
+using UnityEngine.AddressableAssets;
+#endif
 
 namespace MornLib
 {
@@ -18,9 +19,12 @@ namespace MornLib
         /// <summary>Addressableに登録されている全てのNovelアドレスを取得する（エディタ専用）</summary>
         public async static UniTask<List<string>> GetAllNovelAddressesAsync()
         {
+#if USE_ADDRESSABLE
             var label = MornNovelGlobal.I.AddressLabelTag;
             var locations = await Addressables.LoadResourceLocationsAsync(label, typeof(GameObject));
             return locations.Select(location => location.PrimaryKey).OrderBy(address => address.Split('/').Length).ThenBy(address => address).ToList();
+#endif
+            return new List<string>();
         }
 
         public static bool IsUpperNovel => SceneManager.sceneCount > 1;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if USE_ADDRESSABLE
+using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using VContainer;
@@ -58,3 +59,4 @@ namespace MornLib
         }
     }
 }
+#endif

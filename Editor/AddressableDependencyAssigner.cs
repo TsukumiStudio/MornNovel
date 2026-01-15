@@ -1,3 +1,4 @@
+#if USE_ADDRESSABLE
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.AddressableAssets;
@@ -100,3 +101,4 @@ namespace MornLib
         }
     }
 }
+#endif

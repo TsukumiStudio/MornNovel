@@ -34,6 +34,17 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.addressables",
+            "expression": "",
+            "define": "USE_ADDRESSABLE"
+        },
+        {
+            "name": "com.unity.cinemachine",
+            "expression": "",
+            "define": "USE_CINEMACHINE"
+        }
+    ],
     "noEngineReferences": false
 }

@@ -1,5 +1,7 @@
-﻿using Unity.Cinemachine;
-using UnityEngine;
+﻿using UnityEngine;
+#if USE_CINEMACHINE
+using Unity.Cinemachine;
+#endif
 
 namespace MornLib
 {
@@ -21,8 +23,10 @@ namespace MornLib
         [Label("移動時間")] public float AnimDuration = 0.5f;
         [Label("フォーカス時の高さ")] public float HeightFocus = -0.8f;
         [Label("非フォーカス時の高さ")] public float HeightUnfocus = -1.2f;
-        [Label("スケール")]public float PositionScale = 11;
+        [Label("スケール")] public float PositionScale = 11;
+#if USE_CINEMACHINE
         [Header("カメラシェイク")]
         [Label("プレハブ")] public CinemachineImpulseSource SourcePrefab;
+#endif
     }
 }
