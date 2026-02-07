@@ -33,7 +33,7 @@ namespace MornLib
         [Inject] private MornNovelService _novelService;
         [Inject] private IObjectResolver _resolver;
 
-        private AsyncOperationHandle _dependencyHandle;
+        private AsyncOperationHandle<GameObject> _loadHandle;
 
         private async void Awake()
         {
@@ -70,13 +70,12 @@ namespace MornLib
             // Addressablesフォールバック
             var address = _novelService.CurrentNovelAddress.IsNullOrEmpty() ? _debugNovelKey
                 : _novelService.CurrentNovelAddress;
-            var handle = Addressables.LoadAssetAsync<GameObject>(address.Key);
-            _dependencyHandle = Addressables.DownloadDependenciesAsync(address.Key);
-            await handle.Task;
-            await _dependencyHandle.Task;
-            if (handle.Status == AsyncOperationStatus.Succeeded && handle.Result != null)
+            // LoadAssetAsync は依存アセットも自動的にロードする
+            _loadHandle = Addressables.LoadAssetAsync<GameObject>(address.Key);
+            await _loadHandle.Task;
+            if (_loadHandle.Status == AsyncOperationStatus.Succeeded && _loadHandle.Result != null)
             {
-                var result = handle.Result.TryGetComponent<MornNovelMono>(out var prefab);
+                var result = _loadHandle.Result.TryGetComponent<MornNovelMono>(out var prefab);
                 if (result)
                 {
                     _resolver.Instantiate(prefab, transform);
@@ -85,8 +84,6 @@ namespace MornLib
                 {
                     Debug.Log($"NovelMono {address.Key} is exists, but not MornNovelMono");
                 }
-
-                Addressables.Release(handle);
             }
             else
             {
@@ -96,9 +93,10 @@ namespace MornLib
 
         private void OnDestroy()
         {
-            if (!_dependencyHandle.IsValid()) return;
-            Addressables.Release(_dependencyHandle);
-            _dependencyHandle = default;
+            if (_loadHandle.IsValid())
+            {
+                Addressables.Release(_loadHandle);
+            }
         }
     }
 }
