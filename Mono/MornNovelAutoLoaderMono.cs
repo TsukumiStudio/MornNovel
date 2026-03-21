@@ -4,12 +4,18 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using VContainer;
 using VContainer.Unity;
+#if USE_LUA
+using Lua.Unity;
+#endif
 
 namespace MornLib
 {
     internal sealed class MornNovelAutoLoaderMono : MonoBehaviour
     {
         [SerializeField] private MornNovelAddress _debugNovelKey;
+#if USE_LUA
+        [SerializeField] private LuaAsset _debugLuaAsset;
+#endif
         [Inject] private MornNovelService _novelService;
         [Inject] private IObjectResolver _resolver;
 
@@ -19,12 +25,20 @@ namespace MornLib
         {
 #if USE_LUA
             // Lua優先: LuaAssetがセットされていればLuaRunnerで再生
-            if (_novelService.CurrentLuaAsset != null)
+            var luaAsset = _novelService.CurrentLuaAsset;
+
+            // デバッグ用: Serviceに何もセットされていなければデバッグ用LuaAssetを使用
+            if (luaAsset == null && _debugLuaAsset != null &&
+                _novelService.CurrentNovelPrefab == null && _novelService.CurrentNovelAddress.IsNullOrEmpty())
+            {
+                luaAsset = _debugLuaAsset;
+            }
+
+            if (luaAsset != null)
             {
                 var runner = FindFirstObjectByType<MornNovelLuaRunner>();
                 if (runner != null)
                 {
-                    var luaAsset = _novelService.CurrentLuaAsset;
                     _novelService.ClearNovelState();
                     await runner.PlayAsync(luaAsset, destroyCancellationToken);
                     return;
