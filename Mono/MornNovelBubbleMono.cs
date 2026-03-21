@@ -55,6 +55,7 @@ namespace MornLib
 
             // Talker
             _nameText.text = talker.GetText(MornLocalizeCore.CurrentLanguage);
+            _nameText.color = talker.TextColor;
             _nameMaterial.SetColor(_outlineColor, talker.TextColor);
             _messageText.color = talker.TextColor;
             _nameBackMaterial.SetColor(_topColor, talker.NameBackTopGradientColor);
