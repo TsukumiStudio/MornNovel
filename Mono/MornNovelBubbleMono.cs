@@ -28,7 +28,7 @@ namespace MornLib
         private Material _nameMaterial;
         private CancellationTokenSource _cts;
         
-        private void Start()
+        private void Awake()
         {
             _nameBackMaterial = new Material(_nameImage.material);
             _nameImage.material = _nameBackMaterial;
