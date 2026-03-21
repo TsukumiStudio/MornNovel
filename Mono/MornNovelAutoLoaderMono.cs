@@ -14,6 +14,7 @@ namespace MornLib
     {
         [SerializeField] private MornNovelAddress _debugNovelKey;
 #if USE_LUA
+        [Tooltip("デバッグ用Luaファイル。設定されている場合、Addressablesより優先して再生される")]
         [SerializeField] private LuaAsset _debugLuaAsset;
 #endif
         [Inject] private MornNovelService _novelService;
