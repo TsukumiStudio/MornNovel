@@ -12,9 +12,18 @@ namespace MornLib
 {
     internal sealed class MornNovelAutoLoaderMono : MonoBehaviour
     {
+        private enum DebugLoadMode
+        {
+            Novel,
+#if USE_LUA
+            Lua,
+#endif
+        }
+
+        [SerializeField] private DebugLoadMode _debugLoadMode;
         [SerializeField] private MornNovelAddress _debugNovelKey;
 #if USE_LUA
-        [Tooltip("デバッグ用Luaファイル。設定されている場合、Addressablesより優先して再生される")]
+        [Tooltip("デバッグ用Luaファイル。LoadModeがLuaの場合に使用される")]
         [SerializeField] private LuaAsset _debugLuaAsset;
 #endif
         [Inject] private MornNovelService _novelService;
@@ -25,11 +34,10 @@ namespace MornLib
         private async void Awake()
         {
 #if USE_LUA
-            // Lua優先: LuaAssetがセットされていればLuaRunnerで再生
+            // Lua: ServiceにセットされたLuaAsset、またはデバッグ用LuaAsset
             var luaAsset = _novelService.CurrentLuaAsset;
 
-            // デバッグ用: Serviceに何もセットされていなければデバッグ用LuaAssetを使用
-            if (luaAsset == null && _debugLuaAsset != null &&
+            if (luaAsset == null && _debugLoadMode == DebugLoadMode.Lua && _debugLuaAsset != null &&
                 _novelService.CurrentNovelPrefab == null && _novelService.CurrentNovelAddress.IsNullOrEmpty())
             {
                 luaAsset = _debugLuaAsset;
@@ -59,7 +67,6 @@ namespace MornLib
             var address = _novelService.CurrentNovelAddress.IsNullOrEmpty() ? _debugNovelKey
                 : _novelService.CurrentNovelAddress;
             var handle = Addressables.LoadAssetAsync<GameObject>(address.Key);
-            // 一緒に依存アセットもロード
             _dependencyHandle = Addressables.DownloadDependenciesAsync(address.Key);
             await handle.Task;
             await _dependencyHandle.Task;
@@ -85,7 +92,6 @@ namespace MornLib
 
         private void OnDestroy()
         {
-            // 依存アセットの解放
             if (!_dependencyHandle.IsValid()) return;
             Addressables.Release(_dependencyHandle);
             _dependencyHandle = default;
