@@ -1,4 +1,4 @@
-﻿#if USE_ADDRESSABLE
+#if USE_ADDRESSABLE
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -17,12 +17,30 @@ namespace MornLib
 
         private async void Awake()
         {
+#if USE_LUA
+            // Lua優先: LuaAssetがセットされていればLuaRunnerで再生
+            if (_novelService.CurrentLuaAsset != null)
+            {
+                var runner = FindFirstObjectByType<MornNovelLuaRunner>();
+                if (runner != null)
+                {
+                    var luaAsset = _novelService.CurrentLuaAsset;
+                    _novelService.ClearNovelState();
+                    await runner.PlayAsync(luaAsset, destroyCancellationToken);
+                    return;
+                }
+
+                Debug.LogWarning("[MornNovel] MornNovelLuaRunnerがシーンに存在しません");
+            }
+#endif
+            // Prefab優先
             if (_novelService.CurrentNovelPrefab != null)
             {
                 _resolver.Instantiate(_novelService.CurrentNovelPrefab, transform);
                 return;
             }
-            
+
+            // Addressablesフォールバック
             var address = _novelService.CurrentNovelAddress.IsNullOrEmpty() ? _debugNovelKey
                 : _novelService.CurrentNovelAddress;
             var handle = Addressables.LoadAssetAsync<GameObject>(address.Key);

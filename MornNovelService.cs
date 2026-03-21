@@ -1,6 +1,9 @@
-﻿using System;
+using System;
 using UniRx;
 using UnityEngine;
+#if USE_LUA
+using Lua.Unity;
+#endif
 
 namespace MornLib
 {
@@ -20,9 +23,12 @@ namespace MornLib
         public MornNovelAddress CurrentNovelAddress { get; private set; }
         public MornNovelSetType NovelSetType { get; private set; }
         public MornNovelMono CurrentNovelPrefab { get; private set; }
+#if USE_LUA
+        public LuaAsset CurrentLuaAsset { get; private set; }
+#endif
 
         public MornNovelService(
-            Func<MornNovelAddress, bool> novelRead, 
+            Func<MornNovelAddress, bool> novelRead,
             Func<bool> getInput,
             Action<Sprite> backgroundShown)
         {
@@ -62,7 +68,19 @@ namespace MornLib
         public void SetNovelPrefab(MornNovelMono prefab)
         {
             CurrentNovelPrefab = prefab;
+#if USE_LUA
+            CurrentLuaAsset = null;
+#endif
         }
+
+#if USE_LUA
+        /// <summary>Luaスクリプトでノベルを再生する</summary>
+        public void SetLuaAsset(LuaAsset luaAsset)
+        {
+            CurrentLuaAsset = luaAsset;
+            CurrentNovelPrefab = null;
+        }
+#endif
 
         public void SetNovelAddress(MornNovelAddress novelAddress, MornNovelSetType novelSetType)
         {
@@ -71,15 +89,26 @@ namespace MornLib
             {
                 return;
             }
-            
+
             CurrentNovelAddress = novelAddress;
             NovelSetType = novelSetType;
             _onNovelSet.OnNext(novelAddress);
         }
-        
+
         public void OnShowBackground(Sprite sprite)
         {
             _backgroundShown?.Invoke(sprite);
+        }
+
+        /// <summary>ノベル再生後にステートをクリアする</summary>
+        public void ClearNovelState()
+        {
+            CurrentNovelPrefab = null;
+            CurrentNovelAddress = default;
+            NovelSetType = default;
+#if USE_LUA
+            CurrentLuaAsset = null;
+#endif
         }
     }
 }
