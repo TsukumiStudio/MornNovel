@@ -12,7 +12,7 @@ namespace MornLib
     public sealed class MornNovelLuaRunner : MonoBehaviour
     {
         [Inject] private MornNovelService _novelService;
-        [SerializeField] private MornNovelControllerMono _controller;
+        [Inject] private MornNovelControllerMono _controller;
         private bool _isPlaying;
         public bool IsPlaying => _isPlaying;
 
