@@ -25,7 +25,9 @@
         "GUID:0e81d60f9383647e4bb4a78d1d4147d0",
         "GUID:520891f70526d454fa74c098f96aaedd",
         "GUID:1be8a64c9b31e41438dd1516007bcca4",
-        "GUID:dadc2fee866e04157b6aa9c8ff475e67"
+        "GUID:dadc2fee866e04157b6aa9c8ff475e67",
+        "GUID:cafd04c09271747f48dd216fbd847963",
+        "GUID:a3eac051004cc4c6b92cb1b018e08311"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -44,6 +46,11 @@
             "name": "com.unity.cinemachine",
             "expression": "",
             "define": "USE_CINEMACHINE"
+        },
+        {
+            "name": "com.nuskey8.lua.unity",
+            "expression": "",
+            "define": "USE_LUA"
         }
     ],
     "noEngineReferences": false
