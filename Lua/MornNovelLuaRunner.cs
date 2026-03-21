@@ -13,6 +13,7 @@ namespace MornLib
     {
         [Inject] private MornNovelService _novelService;
         [Inject] private MornNovelControllerMono _controller;
+        private MornNovelBubbleSo _currentBubble;
         private bool _isPlaying;
         public bool IsPlaying => _isPlaying;
 
@@ -25,6 +26,7 @@ namespace MornLib
             }
 
             _isPlaying = true;
+            _currentBubble = MornNovelGlobal.I.LuaDefaultBubble;
             var lua = new MornLuaCore();
             RegisterFunctions(lua);
             await lua.DoFileAsync(luaAsset, ct: ct);
@@ -93,12 +95,27 @@ namespace MornLib
                 return 0;
             }));
 
+            // change_bubble(key)
+            lua.AddDefaultFunction("change_bubble", new LuaFunction((context, _) =>
+            {
+                var key = context.GetArgument<string>(0);
+                _currentBubble = global.FindLuaBubble(key);
+                return new System.Threading.Tasks.ValueTask<int>(0);
+            }));
+
             // message(name, text)
             lua.AddDefaultFunction("message", new LuaFunction(async (context, token) =>
             {
                 var name = context.GetArgument<string>(0);
                 var text = context.GetArgument<string>(1);
                 var talker = global.FindLuaTalker(name);
+
+                // 吹き出しを設定
+                if (_currentBubble != null && talker != null)
+                {
+                    _controller.SetBubble(_currentBubble, talker);
+                }
+
                 if (talker != null)
                 {
                     _controller.SetFocus(talker);

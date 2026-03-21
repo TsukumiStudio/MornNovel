@@ -27,6 +27,10 @@ namespace MornLib
         public string UploadUrl => _uploadUrl;
 
 #if USE_LUA
+        [Header("Lua吹き出し")]
+        [SerializeField] private MornNovelBubbleSo _luaDefaultBubble;
+        [SerializeField] private List<LuaBubbleEntry> _luaBubbles;
+
         [Header("Lua背景")]
         [SerializeField] private List<LuaSpriteEntry> _luaBackgrounds;
 
@@ -38,6 +42,20 @@ namespace MornLib
 
         [Header("Lua SE")]
         [SerializeField] private List<LuaAudioEntry> _luaSeEntries;
+
+        internal MornNovelBubbleSo LuaDefaultBubble => _luaDefaultBubble;
+
+        internal MornNovelBubbleSo FindLuaBubble(string key)
+        {
+            if (_luaBubbles == null) return _luaDefaultBubble;
+            foreach (var entry in _luaBubbles)
+            {
+                if (entry.Key == key) return entry.Bubble;
+            }
+
+            Logger.LogWarning($"Lua吹き出し '{key}' が見つかりません");
+            return _luaDefaultBubble;
+        }
 
         internal Sprite FindLuaBackground(string key)
         {
@@ -113,6 +131,13 @@ namespace MornLib
         {
             public string Key;
             public AudioClip Clip;
+        }
+
+        [Serializable]
+        internal sealed class LuaBubbleEntry
+        {
+            public string Key;
+            public MornNovelBubbleSo Bubble;
         }
 #endif
     }
