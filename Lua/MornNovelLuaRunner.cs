@@ -1,6 +1,4 @@
 #if USE_LUA
-using System;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Lua;
@@ -13,10 +11,8 @@ namespace MornLib
     /// <summary>Luaスクリプトでノベルを再生するランナー</summary>
     public sealed class MornNovelLuaRunner : MonoBehaviour
     {
-        [Inject] private MornNovelSettings _novelSettings;
         [Inject] private MornNovelService _novelService;
         [SerializeField] private MornNovelControllerMono _controller;
-        [SerializeField] private MornNovelLuaSettingsSo _luaSettings;
         private bool _isPlaying;
         public bool IsPlaying => _isPlaying;
 
@@ -38,12 +34,14 @@ namespace MornLib
 
         private void RegisterFunctions(MornLuaCore lua)
         {
+            var global = MornNovelGlobal.I;
+
             // background(key) or background(key, immediate)
             lua.AddDefaultFunction("background", new LuaFunction(async (context, token) =>
             {
                 var key = context.GetArgument<string>(0);
                 var immediate = context.ArgumentCount > 1 && context.GetArgument<bool>(1);
-                var sprite = _luaSettings.FindBackground(key);
+                var sprite = global.FindLuaBackground(key);
                 if (sprite != null)
                 {
                     await _controller.SetBackgroundAsync(sprite, immediate, token);
@@ -58,7 +56,7 @@ namespace MornLib
                 var key = context.GetArgument<string>(0);
                 var pos = context.ArgumentCount > 1 ? (float)context.GetArgument<double>(1) : 0f;
                 var flipX = context.ArgumentCount > 2 && context.GetArgument<bool>(2);
-                var entry = _luaSettings.FindCharacter(key);
+                var entry = global.FindLuaCharacter(key);
                 if (entry == null)
                 {
                     return 0;
@@ -78,7 +76,7 @@ namespace MornLib
             lua.AddDefaultFunction("hide", new LuaFunction(async (context, token) =>
             {
                 var key = context.GetArgument<string>(0);
-                var entry = _luaSettings.FindCharacter(key);
+                var entry = global.FindLuaCharacter(key);
                 if (entry == null)
                 {
                     return 0;
@@ -100,7 +98,7 @@ namespace MornLib
             {
                 var name = context.GetArgument<string>(0);
                 var text = context.GetArgument<string>(1);
-                var talker = _luaSettings.FindTalker(name);
+                var talker = global.FindLuaTalker(name);
                 if (talker != null)
                 {
                     _controller.SetFocus(talker);
@@ -118,10 +116,10 @@ namespace MornLib
                             return (null, 0f);
                         }
 
-                        var clip = talker.Clips[UnityEngine.Random.Range(0, talker.Clips.Length)];
+                        var clip = talker.Clips[Random.Range(0, talker.Clips.Length)];
                         return (clip, talker.ClipLength);
                     },
-                    () => MornNovelGlobal.I.SubmitClip,
+                    () => global.SubmitClip,
                     _controller.PlayOneShot,
                     _controller.SetWaitInputIcon,
                     true,
@@ -137,7 +135,7 @@ namespace MornLib
             lua.AddDefaultFunction("se", new LuaFunction((context, _) =>
             {
                 var key = context.GetArgument<string>(0);
-                var clip = _luaSettings.FindSe(key);
+                var clip = global.FindLuaSe(key);
                 if (clip != null)
                 {
                     _controller.PlayOneShot(clip);

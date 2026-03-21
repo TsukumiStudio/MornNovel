@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -23,5 +25,95 @@ namespace MornLib
         public string IgnoreAddressPrefix => _ignoreAddressPrefix;
         public MornSceneObject NovelScene => _novelScene;
         public string UploadUrl => _uploadUrl;
+
+#if USE_LUA
+        [Header("Lua背景")]
+        [SerializeField] private List<LuaSpriteEntry> _luaBackgrounds;
+
+        [Header("Luaキャラクター（キー → ポーズ）")]
+        [SerializeField] private List<LuaPoseEntry> _luaCharacters;
+
+        [Header("Lua話者名（表示名 → Talker）")]
+        [SerializeField] private List<LuaTalkerEntry> _luaTalkers;
+
+        [Header("Lua SE")]
+        [SerializeField] private List<LuaAudioEntry> _luaSeEntries;
+
+        internal Sprite FindLuaBackground(string key)
+        {
+            if (_luaBackgrounds == null) return null;
+            foreach (var entry in _luaBackgrounds)
+            {
+                if (entry.Key == key) return entry.Sprite;
+            }
+
+            Logger.LogWarning($"Lua背景 '{key}' が見つかりません");
+            return null;
+        }
+
+        internal MornNovelPoseSo FindLuaCharacter(string key)
+        {
+            if (_luaCharacters == null) return null;
+            foreach (var entry in _luaCharacters)
+            {
+                if (entry.Key == key) return entry.Pose;
+            }
+
+            Logger.LogWarning($"Luaキャラクター '{key}' が見つかりません");
+            return null;
+        }
+
+        internal MornNovelTalkerSo FindLuaTalker(string name)
+        {
+            if (_luaTalkers == null) return null;
+            foreach (var entry in _luaTalkers)
+            {
+                if (entry.DisplayName == name) return entry.Talker;
+            }
+
+            return null;
+        }
+
+        internal AudioClip FindLuaSe(string key)
+        {
+            if (_luaSeEntries == null) return null;
+            foreach (var entry in _luaSeEntries)
+            {
+                if (entry.Key == key) return entry.Clip;
+            }
+
+            Logger.LogWarning($"Lua SE '{key}' が見つかりません");
+            return null;
+        }
+
+        [Serializable]
+        internal sealed class LuaSpriteEntry
+        {
+            public string Key;
+            public Sprite Sprite;
+        }
+
+        [Serializable]
+        internal sealed class LuaPoseEntry
+        {
+            public string Key;
+            public MornNovelPoseSo Pose;
+        }
+
+        [Serializable]
+        internal sealed class LuaTalkerEntry
+        {
+            [Tooltip("Luaスクリプト内のmessage()で使う表示名")]
+            public string DisplayName;
+            public MornNovelTalkerSo Talker;
+        }
+
+        [Serializable]
+        internal sealed class LuaAudioEntry
+        {
+            public string Key;
+            public AudioClip Clip;
+        }
+#endif
     }
 }
