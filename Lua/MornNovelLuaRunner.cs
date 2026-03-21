@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using Lua;
 using Lua.Unity;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using VContainer;
 
 namespace MornLib
@@ -30,8 +31,23 @@ namespace MornLib
             var lua = new MornLuaCore();
             RegisterFunctions(lua);
             await lua.DoFileAsync(luaAsset, ct: ct);
-            await _controller.AllHideAsync(ct);
+
+            // 終了処理（MornNovelEndCommandの「ノベルシーンだけ消す」を模倣）
+            await EndNovelAsync(ct);
             _isPlaying = false;
+        }
+
+        private async UniTask EndNovelAsync(CancellationToken ct)
+        {
+            // ステートクリア
+            _novelService.ClearNovelState();
+
+            // キャラクター・吹き出し・背景を全て消す
+            await _controller.AllHideAsync(ct);
+            await _controller.RemoveAllAsync(ct);
+
+            // ノベルシーンをアンロード
+            SceneManager.UnloadSceneAsync(gameObject.scene).WithCancellation(ct).Forget();
         }
 
         private void RegisterFunctions(MornLuaCore lua)
@@ -161,7 +177,7 @@ namespace MornLib
                 return new System.Threading.Tasks.ValueTask<int>(0);
             }));
 
-            // finish()
+            // finish() — Luaスクリプトの終端マーカー（実際の終了処理はPlayAsync後処理で実行）
             lua.AddDefaultFunction("finish",
                 new LuaFunction((_, _2) => new System.Threading.Tasks.ValueTask<int>(0)));
         }
