@@ -21,10 +21,14 @@ namespace MornLib
         }
 
         [SerializeField] private DebugLoadMode _debugLoadMode;
-        [SerializeField] private MornNovelAddress _debugNovelKey;
+        [SerializeField, ShowIf(nameof(IsNovelMode))] private MornNovelAddress _debugNovelKey;
 #if USE_LUA
         [Tooltip("デバッグ用Luaファイル。LoadModeがLuaの場合に使用される")]
-        [SerializeField] private LuaAsset _debugLuaAsset;
+        [SerializeField, ShowIf(nameof(IsLuaMode))] private LuaAsset _debugLuaAsset;
+#endif
+        private bool IsNovelMode => _debugLoadMode == DebugLoadMode.Novel;
+#if USE_LUA
+        private bool IsLuaMode => _debugLoadMode == DebugLoadMode.Lua;
 #endif
         [Inject] private MornNovelService _novelService;
         [Inject] private IObjectResolver _resolver;
