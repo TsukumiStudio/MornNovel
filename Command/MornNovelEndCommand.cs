@@ -30,7 +30,7 @@ namespace MornLib
         private MornNovelAddress _address;
         [SerializeField, ShowIf(nameof(IsChangeNovel)), Label("読みかけ登録設定")] 
         private MornNovelSetType _setType;
-        [Inject] private MornBeatControllerMono _beatController;
+        [Inject] private MornBeatController _beatController;
         [Inject] private MornNovelSettings _settings;
         [Inject] private MornNovelService _novelManager;
         [Inject] private MornSoundVolumeCore _volume;
