@@ -10,11 +10,11 @@ namespace MornLib
     {
         public override string Tips => "ノベルを開始する";
         [SerializeField]
-        [Label("BGM")] private MornBeatMemoSo _beatMemo;
+        [Label("BGM")] private MornBeatMusic _beatMusic;
         [SerializeField] private StateLink _nextState;
         [Inject] private MornNovelSettings _settings;
         [Inject] private MornSoundVolumeCore _volumeCore;
-        [Inject] private MornBeatControllerMono _beatController;
+        [Inject] private MornBeatController _beatController;
         [Inject] private MornNovelService _novelService;
 
         public override async void OnStateBegin()
@@ -33,9 +33,9 @@ namespace MornLib
 
             var list = new List<UniTask>();
             var ct = MornApp.QuitToken;
-            if (_beatMemo != null)
+            if (_beatMusic != null)
             {
-                list.Add(_beatController.StartAsync(new MornBeatStartInfo() { BeatMemo = _beatMemo, FadeDuration = _settings.BgmChangeSec, Ct = ct, }));
+                list.Add(_beatController.StartAsync(new MornBeatStartInfo() { Music = _beatMusic, FadeDuration = _settings.BgmChangeSec, Ct = ct, }));
             }
             else
             {
