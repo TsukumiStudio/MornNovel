@@ -23,8 +23,10 @@ namespace MornLib
             var label = MornNovelGlobal.I.AddressLabelTag;
             var locations = await Addressables.LoadResourceLocationsAsync(label, typeof(GameObject));
             return locations.Select(location => location.PrimaryKey).OrderBy(address => address.Split('/').Length).ThenBy(address => address).ToList();
-#endif
+#else
+            await UniTask.CompletedTask;
             return new List<string>();
+#endif
         }
 
         public static bool IsUpperNovel => SceneManager.sceneCount > 1;
