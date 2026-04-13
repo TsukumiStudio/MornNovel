@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace MornLib
 {
-    internal abstract class MornNovelCommandBase : StateBehaviour
+    public abstract class MornNovelCommandBase : StateBehaviour
     {
         public virtual Color? CommandColor => null;
         public virtual string Tips { get; }

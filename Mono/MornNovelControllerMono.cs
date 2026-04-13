@@ -10,7 +10,7 @@ using VContainer.Unity;
 
 namespace MornLib
 {
-    internal sealed class MornNovelControllerMono : MonoBehaviour
+    public sealed class MornNovelControllerMono : MonoBehaviour
     {
         private static readonly int _prevTex = Shader.PropertyToID("_PrevTex");
         private static readonly int _nextTex = Shader.PropertyToID("_NextTex");
@@ -104,7 +104,7 @@ namespace MornLib
             await UniTask.WhenAll(taskA, taskB);
         }
 
-        public MornNovelCharaMono GetChara(MornNovelTalkerSo talkerSo)
+        internal MornNovelCharaMono GetChara(MornNovelTalkerSo talkerSo)
         {
             if (_cachedCharaDict.TryGetValue(talkerSo, out var chara))
             {
@@ -143,7 +143,7 @@ namespace MornLib
             }
         }
 
-        public void SetFocus(MornNovelTalkerSo talker)
+        internal void SetFocus(MornNovelTalkerSo talker)
         {
             foreach (var (key, _) in _cachedCharaDict)
             {
@@ -158,7 +158,7 @@ namespace MornLib
             }
         }
 
-        public void SetBubble(MornNovelBubbleSo bubbleSo, MornNovelTalkerSo talker)
+        internal void SetBubble(MornNovelBubbleSo bubbleSo, MornNovelTalkerSo talker)
         {
             if (bubbleSo == null)
             {

@@ -14,7 +14,7 @@ using UnityEngine.AddressableAssets;
 
 namespace MornLib
 {
-    internal static class MornNovelUtil
+    public static class MornNovelUtil
     {
         /// <summary>Addressableに登録されている全てのNovelアドレスを取得する（エディタ専用）</summary>
         public async static UniTask<List<string>> GetAllNovelAddressesAsync()
@@ -157,7 +157,7 @@ namespace MornLib
             return false;
         }
 
-        public async static UniTask DOLocalMove(this Transform target, Vector3 endValue, float duration, CancellationToken ct = default)
+        internal async static UniTask DOLocalMove(this Transform target, Vector3 endValue, float duration, CancellationToken ct = default)
         {
             if (target != null)
             {
@@ -165,7 +165,7 @@ namespace MornLib
             }
         }
 
-        public async static UniTask DOLocalMoveX(this Transform target, float endValue, float duration, CancellationToken ct = default)
+        internal async static UniTask DOLocalMoveX(this Transform target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target != null)
             {
@@ -173,7 +173,7 @@ namespace MornLib
             }
         }
 
-        public async static UniTask DOLocalMoveY(this Transform target, float endValue, float duration, CancellationToken ct = default)
+        internal async static UniTask DOLocalMoveY(this Transform target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target != null)
             {
@@ -181,7 +181,7 @@ namespace MornLib
             }
         }
 
-        public async static UniTask DOFade(this CanvasGroup target, float endValue, float duration, CancellationToken ct = default)
+        internal async static UniTask DOFade(this CanvasGroup target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target != null)
             {
@@ -189,7 +189,7 @@ namespace MornLib
             }
         }
 
-        public async static UniTask DOFade(this Image target, float endValue, float duration, CancellationToken ct = default)
+        internal async static UniTask DOFade(this Image target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target)
             {
@@ -197,12 +197,12 @@ namespace MornLib
             }
         }
 
-        public static async UniTask DoMaterialFloat(this Image target, string propertyName, float endValue, float duration, CancellationToken ct = default)
+        internal static async UniTask DoMaterialFloat(this Image target, string propertyName, float endValue, float duration, CancellationToken ct = default)
         {
             if (target) await DOAsync(target.material.GetFloat(propertyName), endValue, duration, Mathf.Lerp, x => target.material.SetFloat(propertyName, x), ct);
         }
 
-        public async static UniTask DOFade(this SpriteRenderer target, float endValue, float duration, CancellationToken ct = default)
+        internal async static UniTask DOFade(this SpriteRenderer target, float endValue, float duration, CancellationToken ct = default)
         {
             if (target)
             {
@@ -234,28 +234,28 @@ namespace MornLib
             onUpdateValue.Invoke(endValue);
         }
 
-        public static void SetAlpha(this Image target, float alpha)
+        internal static void SetAlpha(this Image target, float alpha)
         {
             var color = target.color;
             color.a = alpha;
             target.color = color;
         }
 
-        public static void SetAlpha(this SpriteRenderer target, float alpha)
+        internal static void SetAlpha(this SpriteRenderer target, float alpha)
         {
             var color = target.color;
             color.a = alpha;
             target.color = color;
         }
 
-        public static void SetLocalX(this Transform target, float value)
+        internal static void SetLocalX(this Transform target, float value)
         {
             var pos = target.localPosition;
             pos.x = value;
             target.localPosition = pos;
         }
 
-        public static void SetLocalY(this Transform target, float value)
+        internal static void SetLocalY(this Transform target, float value)
         {
             var pos = target.localPosition;
             pos.y = value;
