@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using UnityEngine;
+#if USE_ADDRESSABLE
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+#endif
 
 [assembly: InternalsVisibleTo("MornNovel.Editor")]
 namespace MornLib
@@ -45,62 +50,105 @@ namespace MornLib
 
         internal MornNovelBubbleSo LuaDefaultBubble => _luaDefaultBubble;
 
-        internal MornNovelBubbleSo FindLuaBubble(string key)
+        internal async ValueTask<MornNovelBubbleSo> FindLuaBubbleAsync(string key)
         {
-            if (_luaBubbles == null) return _luaDefaultBubble;
-            foreach (var entry in _luaBubbles)
+            if (_luaBubbles != null)
             {
-                if (entry.Key == key) return entry.Bubble;
+                foreach (var entry in _luaBubbles)
+                {
+                    if (entry.Key == key)
+                    {
+                        return entry.Bubble;
+                    }
+                }
             }
 
-            Logger.LogWarning($"Lua吹き出し '{key}' が見つかりません");
-            return _luaDefaultBubble;
+            var result = await LoadAddressableOrWarn<MornNovelBubbleSo>(key, "Lua吹き出し");
+            return result != null ? result : _luaDefaultBubble;
         }
 
-        internal Sprite FindLuaBackground(string key)
+        internal async ValueTask<Sprite> FindLuaBackgroundAsync(string key)
         {
-            if (_luaBackgrounds == null) return null;
-            foreach (var entry in _luaBackgrounds)
+            if (_luaBackgrounds != null)
             {
-                if (entry.Key == key) return entry.Sprite;
+                foreach (var entry in _luaBackgrounds)
+                {
+                    if (entry.Key == key)
+                    {
+                        return entry.Sprite;
+                    }
+                }
             }
 
-            Logger.LogWarning($"Lua背景 '{key}' が見つかりません");
-            return null;
+            return await LoadAddressableOrWarn<Sprite>(key, "Lua背景");
         }
 
-        internal MornNovelPoseSo FindLuaCharacter(string key)
+        internal async ValueTask<MornNovelPoseSo> FindLuaCharacterAsync(string key)
         {
-            if (_luaCharacters == null) return null;
-            foreach (var entry in _luaCharacters)
+            if (_luaCharacters != null)
             {
-                if (entry.Key == key) return entry.Pose;
+                foreach (var entry in _luaCharacters)
+                {
+                    if (entry.Key == key)
+                    {
+                        return entry.Pose;
+                    }
+                }
             }
 
-            Logger.LogWarning($"Luaキャラクター '{key}' が見つかりません");
-            return null;
+            return await LoadAddressableOrWarn<MornNovelPoseSo>(key, "Luaキャラクター");
         }
 
-        internal MornNovelTalkerSo FindLuaTalker(string name)
+        internal async ValueTask<MornNovelTalkerSo> FindLuaTalkerAsync(string name)
         {
-            if (_luaTalkers == null) return null;
-            foreach (var entry in _luaTalkers)
+            if (_luaTalkers != null)
             {
-                if (entry.DisplayName == name) return entry.Talker;
+                foreach (var entry in _luaTalkers)
+                {
+                    if (entry.DisplayName == name)
+                    {
+                        return entry.Talker;
+                    }
+                }
             }
 
-            return null;
+            return await LoadAddressableOrWarn<MornNovelTalkerSo>(name, "Lua話者");
         }
 
-        internal AudioClip FindLuaSe(string key)
+        internal async ValueTask<AudioClip> FindLuaSeAsync(string key)
         {
-            if (_luaSeEntries == null) return null;
-            foreach (var entry in _luaSeEntries)
+            if (_luaSeEntries != null)
             {
-                if (entry.Key == key) return entry.Clip;
+                foreach (var entry in _luaSeEntries)
+                {
+                    if (entry.Key == key)
+                    {
+                        return entry.Clip;
+                    }
+                }
             }
 
-            Logger.LogWarning($"Lua SE '{key}' が見つかりません");
+            return await LoadAddressableOrWarn<AudioClip>(key, "Lua SE");
+        }
+
+        private async ValueTask<T> LoadAddressableOrWarn<T>(string key, string label) where T : UnityEngine.Object
+        {
+#if USE_ADDRESSABLE
+            try
+            {
+                var handle = Addressables.LoadAssetAsync<T>(key);
+                var result = await handle.Task;
+                if (handle.Status == AsyncOperationStatus.Succeeded && result != null)
+                {
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+                // Addressableにも存在しない
+            }
+#endif
+            Logger.LogWarning($"{label} '{key}' が見つかりません");
             return null;
         }
 

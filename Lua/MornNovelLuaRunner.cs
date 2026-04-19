@@ -59,7 +59,7 @@ namespace MornLib
             {
                 var key = context.GetArgument<string>(0);
                 var immediate = context.ArgumentCount > 1 && context.GetArgument<bool>(1);
-                var sprite = global.FindLuaBackground(key);
+                var sprite = await global.FindLuaBackgroundAsync(key);
                 if (sprite != null)
                 {
                     await _controller.SetBackgroundAsync(sprite, immediate, token);
@@ -74,7 +74,7 @@ namespace MornLib
                 var key = context.GetArgument<string>(0);
                 var pos = context.ArgumentCount > 1 ? (float)context.GetArgument<double>(1) : 0f;
                 var flipX = context.ArgumentCount > 2 && context.GetArgument<bool>(2);
-                var entry = global.FindLuaCharacter(key);
+                var entry = await global.FindLuaCharacterAsync(key);
                 if (entry == null)
                 {
                     return 0;
@@ -94,7 +94,7 @@ namespace MornLib
             lua.AddDefaultFunction("hide", new LuaFunction(async (context, token) =>
             {
                 var key = context.GetArgument<string>(0);
-                var entry = global.FindLuaCharacter(key);
+                var entry = await global.FindLuaCharacterAsync(key);
                 if (entry == null)
                 {
                     return 0;
@@ -112,11 +112,11 @@ namespace MornLib
             }));
 
             // change_bubble(key)
-            lua.AddDefaultFunction("change_bubble", new LuaFunction((context, _) =>
+            lua.AddDefaultFunction("change_bubble", new LuaFunction(async (context, _) =>
             {
                 var key = context.GetArgument<string>(0);
-                _currentBubble = global.FindLuaBubble(key);
-                return new System.Threading.Tasks.ValueTask<int>(0);
+                _currentBubble = await global.FindLuaBubbleAsync(key);
+                return 0;
             }));
 
             // message(name, text)
@@ -124,7 +124,7 @@ namespace MornLib
             {
                 var name = context.GetArgument<string>(0);
                 var text = context.GetArgument<string>(1);
-                var talker = global.FindLuaTalker(name);
+                var talker = await global.FindLuaTalkerAsync(name);
 
                 // 吹き出しを設定
                 if (_currentBubble != null && talker != null)
@@ -165,16 +165,16 @@ namespace MornLib
             }));
 
             // se(key)
-            lua.AddDefaultFunction("se", new LuaFunction((context, _) =>
+            lua.AddDefaultFunction("se", new LuaFunction(async (context, _) =>
             {
                 var key = context.GetArgument<string>(0);
-                var clip = global.FindLuaSe(key);
+                var clip = await global.FindLuaSeAsync(key);
                 if (clip != null)
                 {
                     _controller.PlayOneShot(clip);
                 }
 
-                return new System.Threading.Tasks.ValueTask<int>(0);
+                return 0;
             }));
 
             // finish() — Luaスクリプトの終端マーカー（実際の終了処理はPlayAsync後処理で実行）
