@@ -4,32 +4,12 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using VContainer;
 using VContainer.Unity;
-#if USE_LUA
-using Lua.Unity;
-#endif
 
 namespace MornLib
 {
     internal sealed class MornNovelAutoLoaderMono : MonoBehaviour
     {
-        private enum DebugLoadMode
-        {
-            Novel,
-#if USE_LUA
-            Lua,
-#endif
-        }
-
-        [SerializeField] private DebugLoadMode _debugLoadMode;
-        [SerializeField, ShowIf(nameof(IsNovelMode))] private MornNovelAddress _debugNovelKey;
-#if USE_LUA
-        [Tooltip("デバッグ用Luaファイル。LoadModeがLuaの場合に使用される")]
-        [SerializeField, ShowIf(nameof(IsLuaMode))] private LuaAsset _debugLuaAsset;
-#endif
-        private bool IsNovelMode => _debugLoadMode == DebugLoadMode.Novel;
-#if USE_LUA
-        private bool IsLuaMode => _debugLoadMode == DebugLoadMode.Lua;
-#endif
+        [SerializeField] private MornNovelAddress _debugNovelKey;
         [Inject] private MornNovelService _novelService;
         [Inject] private IObjectResolver _resolver;
 
@@ -37,29 +17,6 @@ namespace MornLib
 
         private async void Awake()
         {
-#if USE_LUA
-            // Lua: ServiceにセットされたLuaAsset、またはデバッグ用LuaAsset
-            var luaAsset = _novelService.CurrentLuaAsset;
-
-            if (luaAsset == null && _debugLoadMode == DebugLoadMode.Lua && _debugLuaAsset != null &&
-                _novelService.CurrentNovelPrefab == null && _novelService.CurrentNovelAddress.IsNullOrEmpty())
-            {
-                luaAsset = _debugLuaAsset;
-            }
-
-            if (luaAsset != null)
-            {
-                var runner = FindFirstObjectByType<MornNovelLuaRunner>();
-                if (runner != null)
-                {
-                    _novelService.ClearNovelState();
-                    await runner.PlayAsync(luaAsset, destroyCancellationToken);
-                    return;
-                }
-
-                Debug.LogWarning("[MornNovel] MornNovelLuaRunnerがシーンに存在しません");
-            }
-#endif
             // Prefab優先
             if (_novelService.CurrentNovelPrefab != null)
             {
