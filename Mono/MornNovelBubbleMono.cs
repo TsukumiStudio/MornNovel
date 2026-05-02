@@ -32,8 +32,11 @@ namespace MornLib
         {
             _nameBackMaterial = new Material(_nameImage.material);
             _nameImage.material = _nameBackMaterial;
-            _nameMaterial = new Material(_nameText.fontMaterial);
-            _nameText.fontMaterial = _nameMaterial;
+            // fontSharedMaterial 経由で per-instance マテリアルを差し込む。
+            // TMP 内部の m_sharedMaterial / MaterialReferenceManager に登録されるため、
+            // SetColor の結果が確実に描画に反映される (fontMaterial 経由は描画パスで無視されるケースあり)。
+            _nameMaterial = new Material(_nameText.fontSharedMaterial);
+            _nameText.fontSharedMaterial = _nameMaterial;
         }
 
         public void SetBubble(MornNovelBubbleSo bubbleSo, MornNovelTalkerSo talker, CancellationToken ct = default)
@@ -55,8 +58,16 @@ namespace MornLib
 
             // Talker
             _nameText.text = talker.GetText(MornLocalizeCore.CurrentLanguage);
-            // 文字色は Material 側 (Outline 等) で管理する想定。 TMP_Text.color は触らない
+            // build で SetColor の結果が描画に届かないケース対策で materialForRendering にも書き込む。
+            // 共有 Material が汚れても、 他 TMP_Text 側は自前の clone を持っていればリーク無効。
+            // (= Cell 側は Awake で独立 clone を作って白 Outline 固定済)
             _nameMaterial.SetColor(_outlineColor, talker.TextColor);
+            if (_nameText.materialForRendering != null)
+            {
+                _nameText.materialForRendering.SetColor(_outlineColor, talker.TextColor);
+            }
+            _nameText.havePropertiesChanged = true;
+            _nameText.ForceMeshUpdate(true);
             _messageText.color = talker.TextColor;
             _nameBackMaterial.SetColor(_topColor, talker.NameBackTopGradientColor);
             _nameBackMaterial.SetColor(_centerColor, talker.NameBackCenterGradientColor);
