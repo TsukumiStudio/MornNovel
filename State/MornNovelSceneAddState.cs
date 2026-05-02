@@ -1,11 +1,13 @@
 ﻿using Arbor;
 using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
 
 namespace MornLib
 {
+    [Serializable]
     internal class MornNovelSceneAddState : StateBehaviour
     {
         [SerializeField] private MornNovelAddress _novelAddress;

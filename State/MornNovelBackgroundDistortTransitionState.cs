@@ -1,8 +1,10 @@
 using Arbor;
+using System;
 using UnityEngine;
 
 namespace MornLib
 {
+    [Serializable]
     internal class MornNovelBackgroundDistortTransitionState : StateBehaviour
     {
         [SerializeField] [SpritePreview] private Sprite _prevSprite;

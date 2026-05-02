@@ -1,9 +1,11 @@
 ﻿using Arbor;
 using UnityEditor;
+using System;
 using UnityEngine;
 
 namespace MornLib
 {
+    [Serializable]
     public abstract class MornNovelCommandBase : StateBehaviour
     {
         public virtual Color? CommandColor => null;

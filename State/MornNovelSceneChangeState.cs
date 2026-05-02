@@ -1,10 +1,12 @@
 ﻿using Arbor;
 using UnityEngine;
+using System;
 using UnityEngine.SceneManagement;
 using VContainer;
 
 namespace MornLib
 {
+    [Serializable]
     internal class MornNovelSceneChangeState : StateBehaviour
     {
         [SerializeField, Label("null可")] private MornNovelAddress _novelAddress;

@@ -1,9 +1,11 @@
 using Arbor;
+using System;
 using UnityEngine;
 using VContainer;
 
 namespace MornLib
 {
+    [Serializable]
     internal sealed class MornNovelIsReadBranchState : StateBehaviour
     {
         [SerializeField, Label("null可")] private MornNovelAddress _novelAddress;
