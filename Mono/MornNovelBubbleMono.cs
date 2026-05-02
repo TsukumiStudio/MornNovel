@@ -55,7 +55,7 @@ namespace MornLib
 
             // Talker
             _nameText.text = talker.GetText(MornLocalizeCore.CurrentLanguage);
-            _nameText.color = talker.TextColor;
+            // 文字色は Material 側 (Outline 等) で管理する想定。 TMP_Text.color は触らない
             _nameMaterial.SetColor(_outlineColor, talker.TextColor);
             _messageText.color = talker.TextColor;
             _nameBackMaterial.SetColor(_topColor, talker.NameBackTopGradientColor);

@@ -15,6 +15,7 @@ namespace MornLib
         [SerializeField] [ViewableSearch] private MornNovelBubbleSo _overrideBubble;
         [SerializeField] [Label("セリフ")] private MornLocalizeString _localizeString;
         [SerializeField] private StateLink _stateLink;
+        [SerializeField] [Label("Submit で進行可能")] private bool _canSubmit = true;
         [Inject] private MornNovelControllerMono _novelController;
         [Inject] private MornNovelSettings _novelSettings;
         [Inject] private MornNovelService _novelService;
@@ -72,13 +73,16 @@ namespace MornLib
                     () => MornNovelGlobal.I.SubmitClip,
                     _novelController.PlayOneShot,
                     controller.SetWaitInputIcon,
-                    true,
-                    () => _novelService.Input(),
+                    _canSubmit,
+                    () => _canSubmit && _novelService.Input(),
                     () => _novelService.IsAutoPlay,
                     x => x == '\n' ? 0.1f : 0.05f,
                     autoSizeText: controller.MessageText,
                     ct: ct);
-                Transition(_stateLink);
+                if (_canSubmit)
+                {
+                    Transition(_stateLink);
+                }
             }
             catch (OperationCanceledException)
             {
