@@ -1,4 +1,10 @@
-﻿using Arbor;
+#if USE_ARBOR
+using Arbor;
+#elif USE_MORNSTATE
+using MornLib;
+using StateBehaviour = MornLib.MornStateBehaviour;
+using StateLink = MornLib.Connection;
+#endif
 using UnityEngine;
 
 namespace MornLib
@@ -19,7 +25,7 @@ namespace MornLib
 
         public override void OnStateBegin()
         {
-            var controller = FindFirstObjectByType<MornNovelControllerMono>();
+            var controller = UnityEngine.Object.FindFirstObjectByType<MornNovelControllerMono>();
             if (_pose.Talker.IsMulti)
             {
                 Debug.LogWarning("複数人Talkerのキャラ制御はできません");

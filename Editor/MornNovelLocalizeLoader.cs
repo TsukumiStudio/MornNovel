@@ -1,4 +1,11 @@
-﻿using Arbor;
+#if USE_ARBOR
+#if USE_ARBOR
+using Arbor;
+#elif USE_MORNSTATE
+using MornLib;
+using StateBehaviour = MornLib.MornStateBehaviour;
+using StateLink = MornLib.Connection;
+#endif
 using Cysharp.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -136,3 +143,4 @@ namespace MornLib
         }
     }
 }
+#endif

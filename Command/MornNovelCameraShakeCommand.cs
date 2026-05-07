@@ -1,6 +1,12 @@
 #if USE_CINEMACHINE
 using System;
+#if USE_ARBOR
 using Arbor;
+#elif USE_MORNSTATE
+using MornLib;
+using StateBehaviour = MornLib.MornStateBehaviour;
+using StateLink = MornLib.Connection;
+#endif
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -24,7 +30,7 @@ namespace MornLib
             {
                 if (_novelSettings.SourcePrefab != null)
                 {
-                    var source = Instantiate(_novelSettings.SourcePrefab);
+                    var source = UnityEngine.Object.Instantiate(_novelSettings.SourcePrefab);
                     await ShakeAsync(source);
                     Destroy(source.gameObject);
                 }

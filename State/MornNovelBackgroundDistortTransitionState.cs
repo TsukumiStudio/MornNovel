@@ -1,4 +1,10 @@
+#if USE_ARBOR
 using Arbor;
+#elif USE_MORNSTATE
+using MornLib;
+using StateBehaviour = MornLib.MornStateBehaviour;
+using StateLink = MornLib.Connection;
+#endif
 using System;
 using UnityEngine;
 
@@ -14,7 +20,7 @@ namespace MornLib
 
         public override async void OnStateBegin()
         {
-            var controller = FindFirstObjectByType<MornNovelControllerMono>();
+            var controller = UnityEngine.Object.FindFirstObjectByType<MornNovelControllerMono>();
             await controller.SetBackgroundDistortTransitionAsync(_prevSprite, _nextSprite);
             Transition(_nextState);
         }

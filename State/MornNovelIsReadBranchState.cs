@@ -1,4 +1,10 @@
+#if USE_ARBOR
 using Arbor;
+#elif USE_MORNSTATE
+using MornLib;
+using StateBehaviour = MornLib.MornStateBehaviour;
+using StateLink = MornLib.Connection;
+#endif
 using System;
 using UnityEngine;
 using VContainer;

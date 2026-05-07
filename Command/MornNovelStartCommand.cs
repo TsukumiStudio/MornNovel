@@ -1,5 +1,11 @@
 ﻿using System.Collections.Generic;
+#if USE_ARBOR
 using Arbor;
+#elif USE_MORNSTATE
+using MornLib;
+using StateBehaviour = MornLib.MornStateBehaviour;
+using StateLink = MornLib.Connection;
+#endif
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;

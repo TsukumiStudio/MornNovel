@@ -1,4 +1,10 @@
-﻿using Arbor;
+#if USE_ARBOR
+using Arbor;
+#elif USE_MORNSTATE
+using MornLib;
+using StateBehaviour = MornLib.MornStateBehaviour;
+using StateLink = MornLib.Connection;
+#endif
 using UnityEditor;
 using System;
 using UnityEngine;
@@ -12,7 +18,7 @@ namespace MornLib
         public virtual string Tips { get; }
     }
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && USE_ARBOR
     [CustomEditor(typeof(MornNovelCommandBase), true)]
     public sealed class ColorCommandBaseEditor : UnityEditor.Editor
     {

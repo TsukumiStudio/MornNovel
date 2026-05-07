@@ -52,7 +52,7 @@ namespace MornLib
                 _novelManager.SetNovelAddress(_address, _setType);
             }
 
-            var controller = FindFirstObjectByType<MornNovelControllerMono>();
+            var controller = UnityEngine.Object.FindFirstObjectByType<MornNovelControllerMono>();
             var taskList = new List<UniTask>();
             var ct = CancellationTokenOnEnd;
             if (_isStopBgm)
