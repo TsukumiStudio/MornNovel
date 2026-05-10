@@ -33,7 +33,6 @@ namespace MornLib
         [Inject] private MornBeatController _beatController;
         [Inject] private MornNovelSettings _settings;
         [Inject] private MornNovelService _novelManager;
-        [Inject] private MornSoundVolumeCore _volume;
         public bool IsChangeScene => _endTransitionType == NovelEndTransitionType.他シーンへ遷移;
         private bool IsCloseScene => _endTransitionType == NovelEndTransitionType.ノベルシーンだけ消す;
         private bool IsChangeNovel => _endTransitionType == NovelEndTransitionType.次のノベルをこのまま読み込む ||
@@ -66,7 +65,7 @@ namespace MornLib
             {
                 var transition = _novelManager.IsDebug ? MornNovelGlobal.I.DebugTransition : _transitionType;
                 taskList.Add(MornTransitionCore.FillAsync(transition, ct));
-                taskList.Add(_volume.FadeAsync(new MornSoundVolumeFadeInfo
+                taskList.Add(MornSoundService.I.FadeAsync(new MornSoundFadeInfo
                 {
                     SoundVolumeType = _settings.FadeVolumeType,
                     Duration = _settings.BgmChangeSec,

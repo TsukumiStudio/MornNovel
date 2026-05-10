@@ -4,7 +4,7 @@ using Arbor;
 #elif USE_MORNSTATE
 using MornLib;
 using StateBehaviour = MornLib.MornStateBehaviour;
-using StateLink = MornLib.Connection;
+using StateLink = MornLib.StateLink;
 #endif
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -19,7 +19,6 @@ namespace MornLib
         [Label("BGM")] private MornBeatMusic _beatMusic;
         [SerializeField] private StateLink _nextState;
         [Inject] private MornNovelSettings _settings;
-        [Inject] private MornSoundVolumeCore _volumeCore;
         [Inject] private MornBeatController _beatController;
         [Inject] private MornNovelService _novelService;
 
@@ -49,8 +48,8 @@ namespace MornLib
             }
 
             list.Add(
-                _volumeCore.FadeAsync(
-                    new MornSoundVolumeFadeInfo
+                MornSoundService.I.FadeAsync(
+                    new MornSoundFadeInfo
                     {
                         SoundVolumeType = _settings.FadeVolumeType, Duration = _settings.BgmChangeSec, IsFadeIn = true, CancellationToken = ct,
                     }));

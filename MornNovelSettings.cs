@@ -9,7 +9,7 @@ namespace MornLib
     public sealed class MornNovelSettings : ScriptableObject
     {
         [Header("サウンド")]
-        [Label("音量フェード対象")] public MornSoundVolumeType FadeVolumeType;
+        [Label("音量フェード対象")] public MornSoundMixerType FadeVolumeType;
         [Label("BGMフェード時間")] public float BgmChangeSec = 1f;
         [Header("トランジション")]
         [Label("背景シンプル切り替え時間")] public float BackgroundFadeSec = 1f;
