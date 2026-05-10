@@ -1,6 +1,6 @@
 #if USE_ARBOR
 using Arbor;
-#elif USE_MORNSTATE
+#else
 using MornLib;
 using StateBehaviour = MornLib.MornStateBehaviour;
 #endif
