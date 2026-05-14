@@ -1,10 +1,11 @@
 #if USE_CINEMACHINE
 using System;
-#if USE_ARBOR
-using Arbor;
-#else
+#if USE_MORNSTATE || USE_ARBOR
+#if USE_MORNSTATE
 using MornLib;
 using StateBehaviour = MornLib.MornStateBehaviour;
+#elif USE_ARBOR
+using Arbor;
 #endif
 using Cysharp.Threading.Tasks;
 using Unity.Cinemachine;
@@ -59,3 +60,4 @@ namespace MornLib
     }
 }
 #endif
+#endif // USE_MORNSTATE || USE_ARBOR
