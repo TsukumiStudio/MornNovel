@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#if USE_MORNSTATE || USE_ARBOR
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -17,6 +18,10 @@ namespace MornLib
         }
 
         public override string Tips => "ノベルを終了する";
+        [Inject] private MornBeatController _beatController;
+        [Inject] private MornNovelControllerMono _novelController;
+        [Inject] private MornNovelSettings _settings;
+        [Inject] private MornNovelService _novelManager;
         [SerializeField, Label("既読フラグをつける")] private bool _checkNovelRead = true;
         [SerializeField, Label("BGMを止めるか")]
         private bool _isStopBgm = true;
@@ -30,9 +35,6 @@ namespace MornLib
         private MornNovelAddress _address;
         [SerializeField, ShowIf(nameof(IsChangeNovel)), Label("読みかけ登録設定")] 
         private MornNovelSetType _setType;
-        [Inject] private MornBeatController _beatController;
-        [Inject] private MornNovelSettings _settings;
-        [Inject] private MornNovelService _novelManager;
         public bool IsChangeScene => _endTransitionType == NovelEndTransitionType.他シーンへ遷移;
         private bool IsCloseScene => _endTransitionType == NovelEndTransitionType.ノベルシーンだけ消す;
         private bool IsChangeNovel => _endTransitionType == NovelEndTransitionType.次のノベルをこのまま読み込む ||
@@ -51,7 +53,6 @@ namespace MornLib
                 _novelManager.SetNovelAddress(_address, _setType);
             }
 
-            var controller = UnityEngine.Object.FindFirstObjectByType<MornNovelControllerMono>();
             var taskList = new List<UniTask>();
             var ct = CancellationTokenOnEnd;
             if (_isStopBgm)
@@ -76,7 +77,7 @@ namespace MornLib
 
             if (IsCloseScene && !_novelManager.IsDebug)
             {
-                taskList.Add(controller.RemoveAllAsync(ct));
+                taskList.Add(_novelController.RemoveAllAsync(ct));
             }
 
             await UniTask.WhenAll(taskList);
@@ -98,3 +99,4 @@ namespace MornLib
         }
     }
 }
+#endif // USE_MORNSTATE || USE_ARBOR

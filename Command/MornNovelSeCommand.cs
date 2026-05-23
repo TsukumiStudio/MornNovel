@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if USE_MORNSTATE || USE_ARBOR
+using System;
 using UnityEngine;
 using VContainer;
 
@@ -17,3 +18,4 @@ namespace MornLib
         }
     }
 }
+#endif // USE_MORNSTATE || USE_ARBOR
