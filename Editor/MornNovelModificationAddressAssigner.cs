@@ -11,8 +11,8 @@ namespace MornLib
     {
         static MornNovelModificationAddressAssigner()
         {
-            // Addressableエントリが変更されたときにイベントをフック
-            AddressableAssetSettings.OnModificationGlobal += OnAddressablesModified;
+            // Addressablesの変更時に依存アセットを自動登録すると、Editor用アセットやフォントまで
+            // Mainグループへ混入してPlayer Build時のSBPエラーにつながるため、常時フックしない。
         }
 
         private static void OnAddressablesModified(AddressableAssetSettings settings,
