@@ -10,8 +10,8 @@ namespace MornLib
     internal sealed class MornNovelAutoLoaderMono : MonoBehaviour
     {
         [SerializeField] private MornNovelAddress _debugNovelKey;
-        [Inject] private MornNovelService _novelService;
-        [Inject] private IObjectResolver _resolver;
+        [Inject] private readonly MornNovelService _novelService;
+        [Inject] private readonly IObjectResolver _resolver;
 
         private AsyncOperationHandle<GameObject> _loadHandle;
 
@@ -30,6 +30,12 @@ namespace MornLib
             // LoadAssetAsync は依存アセットも自動的にロードする
             _loadHandle = Addressables.LoadAssetAsync<GameObject>(address.Key);
             await _loadHandle.Task;
+            // 読み込み中にシーンが破棄されると OnDestroy でハンドルが解放されるため、以降は何もしない
+            if (this == null || !_loadHandle.IsValid())
+            {
+                return;
+            }
+
             if (_loadHandle.Status == AsyncOperationStatus.Succeeded && _loadHandle.Result != null)
             {
                 var result = _loadHandle.Result.TryGetComponent<MornNovelMono>(out var prefab);
