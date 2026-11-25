@@ -23,6 +23,7 @@ namespace MornLib
         [Label("移動時間")] public float AnimDuration = 0.5f;
         [Label("フォーカス時の高さ")] public float HeightFocus = -0.8f;
         [Label("非フォーカス時の高さ")] public float HeightUnfocus = -1.2f;
+        [Label("非話者の明るさ"), Range(0f, 1f)] public float UnfocusedBrightness = 0.65f;
         [Label("スケール")] public float PositionScale = 11;
 #if USE_CINEMACHINE
         [Header("カメラシェイク")]

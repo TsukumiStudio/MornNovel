@@ -26,6 +26,7 @@ namespace MornLib
         [Inject] private IObjectResolver _resolver;
         [Inject] private MornNovelService _novelService;
         private bool _usingBackgroundA;
+        private MornNovelTalkerSo _focusedTalker;
         private CancellationTokenSource _backgroundCts;
         private readonly Dictionary<MornNovelTalkerSo, MornNovelCharaMono> _cachedCharaDict = new();
         private Image Current => _usingBackgroundA ? _backgroundA : _backgroundB;
@@ -111,8 +112,10 @@ namespace MornLib
                 return chara;
             }
 
-            _cachedCharaDict[talkerSo] = InstantiateImpl();
-            return _cachedCharaDict[talkerSo];
+            chara = InstantiateImpl();
+            chara.SetBrightness(GetBrightness(talkerSo));
+            _cachedCharaDict.Add(talkerSo, chara);
+            return chara;
         }
 
         public async UniTask AllHideAsync(CancellationToken ct = default)
@@ -125,12 +128,19 @@ namespace MornLib
 
             taskList.Add(_bubble.HideAsync(ct: ct));
             await UniTask.WhenAll(taskList);
+            _focusedTalker = null;
+            foreach (var chara in _cachedCharaDict.Values)
+            {
+                chara.SetBrightness(1f);
+            }
         }
 
         public void AllFocus()
         {
+            _focusedTalker = null;
             foreach (var chara in _cachedCharaDict.Values)
             {
+                chara.SetBrightness(1f);
                 chara.Focus();
             }
         }
@@ -145,17 +155,63 @@ namespace MornLib
 
         internal void SetFocus(MornNovelTalkerSo talker)
         {
-            foreach (var (key, _) in _cachedCharaDict)
+            _focusedTalker = talker;
+            foreach (var (key, chara) in _cachedCharaDict)
             {
+                chara.SetBrightness(GetBrightness(key));
                 if (key == talker)
                 {
-                    GetChara(key).Focus();
+                    chara.Focus();
                 }
                 else
                 {
-                    GetChara(key).SetUnfocus();
+                    chara.SetUnfocus();
                 }
             }
+        }
+
+        internal UniTask ShakeAsync(MornNovelTalkerSo target, float strength, float duration, CancellationToken ct)
+        {
+            if (target != null)
+            {
+                return _cachedCharaDict.TryGetValue(target, out var chara)
+                    ? chara.ShakeAsync(strength, duration, ct)
+                    : UniTask.CompletedTask;
+            }
+
+            var camera = _backgroundA.canvas.worldCamera;
+            var backgroundA = _backgroundA.rectTransform;
+            var backgroundB = _backgroundB.rectTransform;
+            var size = backgroundA.rect.size;
+            var origin = _charaParent.position;
+            var viewportOrigin = camera != null ? camera.WorldToViewportPoint(origin) : Vector3.zero;
+            var backgroundOriginA = backgroundA.anchoredPosition;
+            var backgroundOriginB = backgroundB.anchoredPosition;
+            var backgroundScaleA = backgroundA.localScale;
+            var backgroundScaleB = backgroundB.localScale;
+            return MornNovelUtil.ShakeAsync(strength, duration, offset =>
+            {
+                if (_charaParent != null)
+                {
+                    _charaParent.position = origin + (Vector3)offset;
+                }
+
+                if (camera != null && backgroundA != null && backgroundB != null)
+                {
+                    var viewportOffset = camera.WorldToViewportPoint(origin + (Vector3)offset) - viewportOrigin;
+                    var backgroundOffset = Vector2.Scale(viewportOffset, size);
+                    var overscan = 1f + 2f * Mathf.Max(Mathf.Abs(viewportOffset.x), Mathf.Abs(viewportOffset.y));
+                    backgroundA.anchoredPosition = backgroundOriginA + backgroundOffset;
+                    backgroundB.anchoredPosition = backgroundOriginB + backgroundOffset;
+                    backgroundA.localScale = backgroundScaleA * overscan;
+                    backgroundB.localScale = backgroundScaleB * overscan;
+                }
+            }, ct);
+        }
+
+        private float GetBrightness(MornNovelTalkerSo talker)
+        {
+            return _focusedTalker == null || _focusedTalker == talker ? 1f : _novelSettings.UnfocusedBrightness;
         }
 
         internal void SetBubble(MornNovelBubbleSo bubbleSo, MornNovelTalkerSo talker)
