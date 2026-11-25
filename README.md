@@ -36,8 +36,12 @@ MornNovelService.SetNovelAddress();
 | MornNovelCharaShowCommand | キャラ登場 |
 | MornNovelSetBackgroundCommand | 背景設定 |
 | MornNovelBgmCommand | BGM再生/停止 |
-| MornNovelCameraShakeCommand | カメラ揺れ |
+| MornNovelCameraShakeCommand | Cinemachine カメラ揺れ |
+| MornNovelShakeCommand | 画面・キャラ揺れ |
 | MornNovelEndCommand | ノベル終了 |
+
+- セリフの Talker が話者。非話者の明るさは `MornNovelSettings.UnfocusedBrightness`（初期値 0.65）。複数人 Talker では全員を通常の明るさに戻す。
+- 揺らしたい箇所に `MornNovelShakeCommand` を置き、Next State をつなぐ。対象なしで背景と立ち絵、対象に Talker を指定するとその立ち絵だけを揺らす。吹き出しは固定。初期値は強さ 0.18（Unity 単位）、長さ 0.25 秒。揺れが終わってから次のステートへ進む。
 
 ### 既読管理
 

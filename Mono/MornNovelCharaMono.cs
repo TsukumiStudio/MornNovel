@@ -125,7 +125,7 @@ namespace MornLib
                 _ctsX = null;
                 _ctsAlpha = null;
                 _parentX.localPosition = new Vector3(aimX, _parentX.localPosition.y, _parentX.localPosition.z);
-                _renderer.color = new Color(1, 1, 1, 0);
+                MornNovelUtil.SetAlpha(_renderer, 0);
             }
             else
             {
@@ -135,6 +135,24 @@ namespace MornLib
                 var taskB = _renderer.DOFade(0, _novelSettings.AnimDuration, _ctsAlpha.Token);
                 await UniTask.WhenAll(taskA, taskB);
             }
+        }
+
+        public void SetBrightness(float brightness)
+        {
+            _renderer.color = new Color(brightness, brightness, brightness, _renderer.color.a);
+        }
+
+        public UniTask ShakeAsync(float strength, float duration, CancellationToken ct)
+        {
+            var target = _renderer.transform;
+            var origin = target.localPosition;
+            return MornNovelUtil.ShakeAsync(strength, duration, offset =>
+            {
+                if (target != null)
+                {
+                    target.localPosition = origin + (Vector3)offset;
+                }
+            }, ct);
         }
 
         public void Focus(CancellationToken ct = default)

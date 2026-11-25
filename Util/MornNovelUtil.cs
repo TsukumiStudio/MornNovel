@@ -210,6 +210,32 @@ namespace MornLib
             }
         }
 
+        internal static async UniTask ShakeAsync(float strength, float duration, Action<Vector2> applyOffset,
+            CancellationToken ct)
+        {
+            if (strength <= 0f || duration <= 0f)
+            {
+                return;
+            }
+
+            try
+            {
+                for (var elapsed = 0f; elapsed < duration; elapsed += Time.deltaTime)
+                {
+                    ct.ThrowIfCancellationRequested();
+                    var phase = elapsed * (2f * Mathf.PI * 16f);
+                    var next = new Vector2(Mathf.Sin(phase), Mathf.Sin(phase * 0.73f))
+                        * (strength * (1f - elapsed / duration));
+                    applyOffset(next);
+                    await UniTask.Yield(cancellationToken: ct);
+                }
+            }
+            finally
+            {
+                applyOffset(Vector2.zero);
+            }
+        }
+
         private async static UniTask DOAsync<T>(T startValue, T endValue, float duration, Func<T, T, float, T> rateFunc, Action<T> onUpdateValue, CancellationToken ct = default)
         {
             // TODO Easingを設定できるように
